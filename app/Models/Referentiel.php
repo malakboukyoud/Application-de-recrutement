@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Referentiel extends Model
 {
     protected $table = 'referentiels';
+
     protected $primaryKey = 'id_ref';
     public $timestamps = false;
 
@@ -19,3 +20,4 @@ class Referentiel extends Model
         return $query->where('type_ref', $type)->where('actif', true);
     }
 }
+

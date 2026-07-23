@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,3 +53,43 @@ class Utilisateur extends Authenticatable
         return in_array($this->profil, ['admin', 'rh']);
     }
 }
+
+
+
+class Utilisateur extends Model
+{
+
+    protected $table = 'utilisateurs';
+
+
+    protected $primaryKey = 'id_utilisateur';
+
+
+    public $timestamps = false;
+
+
+
+    protected $fillable = [
+        'nom',
+        'prenom',
+        'login',
+        'email',
+        'mot_de_passe',
+        'id_profil',
+        'actif'
+    ];
+
+
+
+    // Relation avec le profil
+    public function profil()
+    {
+        return $this->belongsTo(
+            Referentiel::class,
+            'id_profil',
+            'id_ref'
+        );
+    }
+
+}
+
