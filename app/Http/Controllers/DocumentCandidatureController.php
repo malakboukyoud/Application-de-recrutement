@@ -8,18 +8,21 @@ use App\Models\HistoriqueAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class DocumentCandidatureController extends Controller
 {
     /**
      * Ajouter une pièce jointe à une candidature (§6.4 Gestion des pièces jointes).
      * Formats autorisés : PDF, JPG, PNG, DOCX (§10 Gestion documentaire).
+     *
+     * Le type de document est une référence vers `referentiels` (id_type_document),
+     * et non une chaîne libre : la table `documents_candidature` n'a pas de colonne
+     * `type_document`.
      */
     public function store(Request $request, Candidature $candidature): RedirectResponse
     {
         $data = $request->validate([
-            'type_document' => ['required', Rule::in(array_keys(DocumentCandidature::TYPES))],
+            'id_type_document' => ['required', 'integer', 'exists:referentiels,id_ref'],
             'fichier' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:10240'],
             'observation' => ['nullable', 'string'],
         ]);
@@ -31,10 +34,10 @@ class DocumentCandidatureController extends Controller
         );
 
         $document = $candidature->documents()->create([
-            'type_document' => $data['type_document'],
+            'id_type_document' => $data['id_type_document'],
             'nom_fichier' => $nomOriginal,
             'chemin_fichier' => $chemin,
-            'ajoute_par' => auth()->id() ?? 1,
+            'ajout_par' => $this->currentUserId(),
             'observation' => $data['observation'] ?? null,
         ]);
 
@@ -43,7 +46,7 @@ class DocumentCandidatureController extends Controller
         $candidature->update(['dossier_complet' => empty($manquantes)]);
 
         HistoriqueAction::enregistrer('ajout_document', 'documents_candidature', $document->id_document,
-            "Type : {$data['type_document']}");
+            "Type de document (référentiel) : {$data['id_type_document']}");
 
         return back()->with('success', 'Document ajouté avec succès.');
     }

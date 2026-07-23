@@ -25,9 +25,9 @@ class EvaluationController extends Controller
 
     public function store(EvaluationRequest $request, Candidature $candidature): RedirectResponse
     {
-        $evaluation = $candidature->evaluations()->create($request->validated() + [
-            'saisi_par' => auth()->id() ?? \App\Models\Utilisateur::query()->value('id_utilisateur'),
-        ]);
+        // La table `evaluations` n'a pas de colonne `saisi_par` : qui a saisi
+        // l'évaluation est déjà tracé via HistoriqueAction (id_utilisateur).
+        $evaluation = $candidature->evaluations()->create($request->validated());
 
         HistoriqueAction::enregistrer(
             'creation_evaluation',

@@ -45,7 +45,10 @@ class CandidatureController extends Controller
             'id_candidat' => $request->query('id_candidat'),
         ]);
         $candidats = Candidat::orderBy('nom')->get(['id_candidat', 'nom', 'prenom', 'cin']);
-        $offres = OffreRecrutement::whereIn('statut', ['publiee', 'en_traitement'])
+
+        // Seules les offres encore ouvertes acceptent de nouvelles candidatures
+        // (référentiel STATUT_OFFRE : 'Ouverte' / 'Fermée').
+        $offres = OffreRecrutement::where('statut', 'Ouverte')
             ->orderBy('intitule_poste')->get(['id_offre', 'reference_offre', 'intitule_poste']);
 
         return view('candidatures.create', compact('candidature', 'candidats', 'offres'));

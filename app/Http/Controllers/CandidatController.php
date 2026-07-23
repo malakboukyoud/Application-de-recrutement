@@ -19,14 +19,14 @@ class CandidatController extends Controller
         $candidats = Candidat::query()
             ->recherche($request->query('q'))
             ->when($request->query('ville'), fn ($q, $v) => $q->where('ville', $v))
-            ->when($request->query('diplome'), fn ($q, $v) => $q->where('diplome', $v))
+            ->when($request->query('id_diplome'), fn ($q, $v) => $q->where('id_diplome', $v))
             ->withCount('candidatures')
             ->orderBy('nom')
             ->paginate(15)
             ->withQueryString();
 
         $villes = Candidat::query()->distinct()->orderBy('ville')->pluck('ville')->filter();
-        $diplomes = Candidat::query()->distinct()->orderBy('diplome')->pluck('diplome')->filter();
+        $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
 
         return view('candidats.index', compact('candidats', 'villes', 'diplomes'));
     }

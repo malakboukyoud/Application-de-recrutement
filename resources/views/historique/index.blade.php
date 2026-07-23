@@ -12,7 +12,7 @@
 
 @section('content')
     <h3 class="mb-3">Historique des actions</h3>
-    <p class="text-muted">Journal d'audit : traçabilité de toutes les actions effectuées dans l'application (§12 du cahier des charges).</p>
+    <p class="text-muted">Journal d'audit : traçabilité de toutes les actions effectuées dans l'application .</p>
 
     <form method="GET" class="row g-2 mb-3">
         <div class="col-md-3">

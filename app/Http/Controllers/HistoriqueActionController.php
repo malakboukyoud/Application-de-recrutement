@@ -13,6 +13,10 @@ class HistoriqueActionController extends Controller
      * Journal d'audit — traçabilité de toutes les actions (§12 du cahier des charges) :
      * qui a fait quoi, quand, sur quel enregistrement. Filtrable par table concernée,
      * par utilisateur et par période.
+     *
+     * Aucun changement nécessaire : les colonnes utilisées (table_concernee,
+     * id_utilisateur, date_action) correspondent exactement à la table
+     * `historique_actions` du nouveau schéma.
      */
     public function index(Request $request): View
     {
