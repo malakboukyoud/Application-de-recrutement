@@ -255,7 +255,7 @@
 
 
     <li class="{{ request()->routeIs('candidats.index') ? 'active' : '' }}">
-        <a href="#">
+        <a href="{{ route('candidats.index') }}">
             <i class="bi bi-people-fill"></i>
             <span>Candidats</span>
         </a>
@@ -263,7 +263,7 @@
 
 
     <li class="{{ request()->routeIs('candidatures.index') ? 'active' : '' }}">
-        <a href="#">
+        <a href="{{ route('candidatures.index') }}">
             <i class="bi bi-file-earmark-text-fill"></i>
             <span>Candidatures</span>
         </a>
@@ -287,7 +287,7 @@
 
 
     <li>
-        <a href="#">
+        <a href="evaluations._form">
             <i class="bi bi-star-fill"></i>
             <span>Évaluation</span>
         </a>
@@ -311,7 +311,7 @@
 
 
     <li>
-        <a href="#">
+        <a href="{{ route('historique.index') }}">
             <i class="bi bi-clock-history"></i>
             <span>Historique</span>
         </a>
