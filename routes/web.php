@@ -101,7 +101,7 @@ Route::get('/parametres', [ParametresController::class, 'index'])
 // À insérer dans routes/web.php de votre projet Laravel.
 // Ajoutez ->middleware(['auth']) (et une policy par profil) selon §11 du cahier des charges.
 
-Route::redirect('/', '/candidatures');
+/*Route::redirect('/', '/candidatures');
 
 Route::resource('candidats', CandidatController::class);
 
@@ -130,7 +130,7 @@ Route::get('evaluations/{evaluation}/edit', [EvaluationController::class, 'edit'
 Route::put('evaluations/{evaluation}', [EvaluationController::class, 'update'])
     ->name('evaluations.update');
 Route::delete('evaluations/{evaluation}', [EvaluationController::class, 'destroy'])
-    ->name('evaluations.destroy');
+    ->name('evaluations.destroy');*/
 
 
 
