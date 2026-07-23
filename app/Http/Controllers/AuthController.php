@@ -28,9 +28,23 @@ class AuthController extends Controller
 
         // Vérification dans la base
         $user = DB::table('utilisateurs')
-                    ->where('login', $request->login)
-                    ->where('mot_de_passe', $request->password)
-                    ->first();
+            ->join(
+                'referentiels',
+                'utilisateurs.id_profil',
+                '=',
+                'referentiels.id_ref'
+            )
+            ->select(
+                'utilisateurs.*',
+                'referentiels.libelle as profil'
+            )
+            ->where('utilisateurs.login', $request->login)
+            ->where('utilisateurs.mot_de_passe', $request->password)
+            ->first();
+            session([
+                'user' => $user
+            ]);
+
 
         if ($user) {
 
@@ -40,7 +54,7 @@ class AuthController extends Controller
             ]);
 
             // Redirection vers le Dashboard
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard.index');
         }
 
         // Si identifiants incorrects

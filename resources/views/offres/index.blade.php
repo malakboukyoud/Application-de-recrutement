@@ -64,20 +64,34 @@ img{
 /*==================================================
                     TOPBAR
 ==================================================*/
-
 .topbar{
 
     height:70px;
+
+    width:100%;
+
     background:#fff;
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     padding:0 30px;
 
     border-bottom:1px solid var(--border);
 
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    right:0;
+
+    z-index:1100;
+    
 }
 
 .topbar-left{
@@ -230,6 +244,8 @@ img{
     margin:auto;
 
     padding:35px;
+
+    padding-top:95px;
 
 }
 
@@ -454,6 +470,7 @@ padding:20px;
 
 }
 
+
 .page-title{
 
 flex-direction:column;
@@ -470,10 +487,20 @@ text-align:center;
 }
 
 }
+.main{
+
+    margin-left:260px;
+
+    width:calc(100% - 260px);
+
+}
+
 
 </style>
 <body>
-
+ <div>
+    @include('layouts.sidebar')
+        </div>
 <div class="main">
 
     <!-- ===========================
@@ -541,7 +568,7 @@ text-align:center;
     ============================ -->
 
     <div class="content">
-
+        
         <div class="page-title">
 
             <div>

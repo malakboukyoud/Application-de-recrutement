@@ -85,11 +85,15 @@ img{
 
 .page{
 
-    max-width: 1450px;
+    max-width:1450px;
 
-    margin: 0 auto;
+    margin:0 auto;
 
-    padding: 30px;
+    padding:30px;
+
+    padding-top:110px; /* espace sous la topbar */
+
+    margin-left:260px; /* espace pour sidebar */
 
 }
 
@@ -101,17 +105,33 @@ img{
 .topbar{
 
     height:70px;
+
+    width:100%;
+
     background:#fff;
 
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 
     padding:0 30px;
 
     border-bottom:1px solid var(--border);
 
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    right:0;
+
+    z-index:1100;
+    
 }
+
 
 .topbar-left{
 
@@ -261,7 +281,6 @@ img{
     margin:auto;
 
 }
-
 
 /*==================================================
                     TITRE
@@ -557,7 +576,10 @@ img{
     color:#991B1B;
 
 }
-
+.badge-resp{
+    background:#FFEDD5;
+    color:#C2410C;
+}
 
 /*==================================================
                     ACTIONS
@@ -978,6 +1000,7 @@ button:hover{
 </head>
 
 <body>
+    @include('layouts.sidebar')
  <!-- ===========================
             TOPBAR
     ============================ -->
@@ -1015,6 +1038,7 @@ button:hover{
                 <option value="RH">RH</option>
                 <option value="Commission">Commission</option>
                 <option value="Consultation">Consultation</option>
+                <option value="Responsable de service">Responsable se service</option>
 
             </select>
 
@@ -1045,7 +1069,7 @@ button:hover{
 
 
 <div class="page">
-
+    
     
 
     <!-- ===========================
@@ -1254,9 +1278,14 @@ button:hover{
                     $class="badge-commission";
                     break;
 
-                default:
+                case 4:
                     $profil="Consultation";
                     $class="badge-consult";
+                    break;
+                
+                 default:
+                    $profil="Responsable de service";
+                    $class="badge-resp";
                     break;
 
             }

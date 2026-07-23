@@ -1098,65 +1098,25 @@ Profil <span class="text-danger">*</span>
 
 
 
-<select
-name="id_profil"
-class="form-select"
-required>
+<select name="id_profil" class="form-select" required>
+
+    <option value="">
+        -- Choisir un profil --
+    </option>
 
 
+    @foreach($profils as $profil)
 
-<option value="">
+        <option value="{{ $profil->id_ref }}">
 
-Choisir un profil...
+            {{ $profil->libelle }}
 
-</option>
+        </option>
 
-
-
-<option value="Administrateur">
-
-Administrateur
-
-</option>
-
-
-
-<option value="RH">
-
-RH
-
-</option>
-
-
-
-<option value="Commission">
-
-Commission
-
-</option>
-
-
-
-<option value="Responsable">
-
-Responsable
-
-</option>
-
-
-
-<option value="Consultation">
-
-Consultation
-
-</option>
-
+    @endforeach
 
 
 </select>
-
-
-
 </div>
 
 

@@ -5,158 +5,246 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Utilisateur;
 use App\Models\Referentiel;
+use Illuminate\Support\Facades\Hash;
+
 
 class UtilisateurController extends Controller
 {
+
+
     /**
      * Liste des utilisateurs
      */
-    public function index()
-    {
-        $utilisateurs = Utilisateur::with('profil')
-            ->orderBy('nom')
-            ->paginate(10);
+  public function index()
+{
 
-        return view('utilisateurs.index', compact('utilisateurs'));
-    }
+    $utilisateurs = Utilisateur::with('profil')
+        ->paginate(10);
+
+
+    return view(
+        'utilisateurs.index',
+        compact('utilisateurs')
+    );
+
+}
+
+
 
     /**
-     * Formulaire d'ajout
+     * Formulaire création utilisateur
      */
     public function create()
     {
-        $profils = Referentiel::where('type_ref', 'Profil')->get();
 
-        return view('utilisateurs.create', compact('profils'));
+        $profils = Referentiel::type('profil')->get();
+
+
+        return view(
+            'utilisateurs.create',
+            compact('profils')
+        );
+
     }
 
+
+
+
     /**
-     * Enregistrer un utilisateur
+     * Enregistrer utilisateur
      */
     public function store(Request $request)
     {
+
+
         $request->validate([
-            'nom' => 'required|max:100',
-            'prenom' => 'required|max:100',
-            'login' => 'required|max:100|unique:utilisateurs,login',
+
+            'nom' => 'required',
+
+            'prenom' => 'required',
+
+            'login' => 'required|unique:utilisateurs,login',
+
             'email' => 'required|email|unique:utilisateurs,email',
+
             'mot_de_passe' => 'required|min:6',
-            'id_profil' => 'required'
+
+            'id_profil' => 'required|integer',
+
+            'actif' => 'required'
+
         ]);
+
+
+
 
         Utilisateur::create([
+
+
             'nom' => $request->nom,
+
+
             'prenom' => $request->prenom,
+
+
             'login' => $request->login,
+
+
             'email' => $request->email,
-            'mot_de_passe' => bcrypt($request->mot_de_passe),
+
+
+            'mot_de_passe' => Hash::make($request->mot_de_passe),
+
+
             'id_profil' => $request->id_profil,
-            'actif' => 1
+
+
+            'actif' => $request->actif
+
+
         ]);
 
+
+
+
         return redirect()
+
             ->route('utilisateurs.index')
-            ->with('success', 'Utilisateur ajouté avec succès.');
+
+            ->with(
+                'success',
+                'Utilisateur ajouté avec succès'
+            );
+
     }
 
+
+
+
+
     /**
-     * Afficher un utilisateur
+     * Afficher utilisateur
      */
     public function show($id)
     {
+
         $utilisateur = Utilisateur::with('profil')
             ->findOrFail($id);
 
-        return view('utilisateurs.show', compact('utilisateur'));
+
+        return view(
+            'utilisateurs.show',
+            compact('utilisateur')
+        );
+
     }
 
+
+
+
+
     /**
-     * Formulaire de modification
+     * Modifier
      */
     public function edit($id)
     {
+
         $utilisateur = Utilisateur::findOrFail($id);
 
-        $profils = Referentiel::where('type_ref', 'Profil')->get();
 
-        return view('utilisateurs.edit', compact('utilisateur', 'profils'));
+        $profils = Referentiel::type('profil')->get();
+
+
+        return view(
+            'utilisateurs.edit',
+            compact(
+                'utilisateur',
+                'profils'
+            )
+        );
+
     }
+
+
+
+
 
     /**
-     * Modifier un utilisateur
+     * Mise à jour
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
+
+
         $utilisateur = Utilisateur::findOrFail($id);
 
+
+
         $request->validate([
-            'nom' => 'required|max:100',
-            'prenom' => 'required|max:100',
-            'login' => 'required|max:100|unique:utilisateurs,login,' . $id . ',id_utilisateur',
-            'email' => 'required|email|unique:utilisateurs,email,' . $id . ',id_utilisateur',
-            'id_profil' => 'required'
+
+            'nom'=>'required',
+
+            'prenom'=>'required',
+
+            'email'=>'required|email',
+
+            'id_profil'=>'required|integer'
+
         ]);
 
-        $utilisateur->nom = $request->nom;
-        $utilisateur->prenom = $request->prenom;
-        $utilisateur->login = $request->login;
-        $utilisateur->email = $request->email;
-        $utilisateur->id_profil = $request->id_profil;
 
-        if ($request->filled('mot_de_passe')) {
-            $utilisateur->mot_de_passe = bcrypt($request->mot_de_passe);
-        }
 
-        $utilisateur->save();
+
+        $utilisateur->update([
+
+            'nom'=>$request->nom,
+
+            'prenom'=>$request->prenom,
+
+            'email'=>$request->email,
+
+            'id_profil'=>$request->id_profil,
+
+            'actif'=>$request->actif
+
+        ]);
+
+
 
         return redirect()
+
             ->route('utilisateurs.index')
-            ->with('success', 'Utilisateur modifié avec succès.');
+
+            ->with(
+                'success',
+                'Utilisateur modifié'
+            );
+
     }
+
+
+
+
 
     /**
      * Supprimer
      */
     public function destroy($id)
     {
-        $utilisateur = Utilisateur::findOrFail($id);
 
-        $utilisateur->delete();
+        Utilisateur::findOrFail($id)->delete();
+
 
         return redirect()
+
             ->route('utilisateurs.index')
-            ->with('success', 'Utilisateur supprimé avec succès.');
+
+            ->with(
+                'success',
+                'Utilisateur supprimé'
+            );
+
     }
 
-    /**
-     * Activer
-     */
-    public function activer($id)
-    {
-        $utilisateur = Utilisateur::findOrFail($id);
 
-        $utilisateur->actif = 1;
-
-        $utilisateur->save();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Utilisateur activé.');
-    }
-
-    /**
-     * Désactiver
-     */
-    public function desactiver($id)
-    {
-        $utilisateur = Utilisateur::findOrFail($id);
-
-        $utilisateur->actif = 0;
-
-        $utilisateur->save();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Utilisateur désactivé.');
-    }
 }
