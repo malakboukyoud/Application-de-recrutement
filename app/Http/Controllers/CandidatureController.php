@@ -7,6 +7,7 @@ use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\HistoriqueAction;
 use App\Models\OffreRecrutement;
+use App\Models\Referentiel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -67,10 +68,15 @@ class CandidatureController extends Controller
 
     public function show(Candidature $candidature): View
     {
-        $candidature->load(['candidat', 'offre', 'documents', 'convocations', 'evaluations']);
+        $candidature->load(['candidat', 'offre', 'documents.typeDocument', 'convocations', 'evaluations']);
         $piecesManquantes = $candidature->piecesManquantes();
 
-        return view('candidatures.show', compact('candidature', 'piecesManquantes'));
+        $typesDocument = Referentiel::where('type_ref', 'TYPE_DOCUMENT')
+            ->where('actif', 1)
+            ->orderBy('libelle')
+            ->get(['id_ref', 'libelle']);
+
+        return view('candidatures.show', compact('candidature', 'piecesManquantes', 'typesDocument'));
     }
 
     public function edit(Candidature $candidature): View

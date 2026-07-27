@@ -1,4 +1,5 @@
 <?php
+// Destination : app/Models/DocumentCandidature.php
 
 namespace App\Models;
 
@@ -10,6 +11,10 @@ class DocumentCandidature extends Model
     protected $primaryKey = 'id_document';
     public $timestamps = false;
 
+    // Types de documents désormais gérés via la table `referentiels`
+    // (type_ref = 'TYPE_DOCUMENT') — voir la relation typeDocument() ci-dessous.
+    // Cette constante n'est plus utilisée par le formulaire, mais laissée ici
+    // au cas où vous vous en serviez ailleurs.
     public const TYPES = [
         'cv' => 'CV',
         'lettre_motivation' => 'Lettre de motivation',
@@ -25,8 +30,8 @@ class DocumentCandidature extends Model
     ];
 
     protected $fillable = [
-        'id_candidature', 'type_document', 'nom_fichier', 'chemin_fichier',
-        'ajoute_par', 'observation',
+        'id_candidature', 'id_type_document', 'nom_fichier', 'chemin_fichier',
+        'ajout_par', 'observation',
     ];
 
     protected $casts = [
@@ -35,15 +40,16 @@ class DocumentCandidature extends Model
 
     public function candidature()
     {
-        return $this->belongsTo(Candidature::class, 'id_candidature', 'id_candidature');
+        return $this->belongsTo(\App\Models\Candidature::class, 'id_candidature', 'id_candidature');
     }
 
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'ajoute_par', 'id_utilisateur');
+        return $this->belongsTo(Utilisateur::class, 'ajout_par', 'id_utilisateur');
     }
+
     public function typeDocument()
     {
-    return $this->belongsTo(Referentiel::class, 'id_type_document', 'id_ref');
+        return $this->belongsTo(\App\Models\Referentiel::class, 'id_type_document', 'id_ref');
     }
 }

@@ -89,7 +89,7 @@
             <tbody>
             @forelse ($candidature->documents as $doc)
                 <tr>
-                    <td>{{ \App\Models\DocumentCandidature::TYPES[$doc->type_document] ?? $doc->type_document }}</td>
+                    <td>{{ $doc->typeDocument->libelle ?? '—' }}</td>
                     <td>{{ $doc->nom_fichier }}</td>
                     <td>{{ $doc->date_ajout->format('d/m/Y H:i') }}</td>
                     <td class="text-end">
@@ -107,13 +107,23 @@
             </tbody>
         </table>
 
+        @if ($errors->any())
+            <div class="alert alert-danger py-2 mt-2">
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $erreur)
+                        <li>{{ $erreur }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('candidatures.documents.store', $candidature) }}" enctype="multipart/form-data" class="row g-2 mt-2">
             @csrf
             <div class="col-md-4">
-                <select name="type_document" class="form-select" required>
+                <select name="id_type_document" class="form-select" required>
                     <option value="">Type de document</option>
-                    @foreach (\App\Models\DocumentCandidature::TYPES as $val => $libelle)
-                        <option value="{{ $val }}">{{ $libelle }}</option>
+                    @foreach ($typesDocument as $type)
+                        <option value="{{ $type->id_ref }}" @selected(old('id_type_document') == $type->id_ref)>{{ $type->libelle }}</option>
                     @endforeach
                 </select>
             </div>

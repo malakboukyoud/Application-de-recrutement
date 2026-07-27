@@ -12,6 +12,7 @@ use App\Models\Referentiel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class DocumentCandidatureController extends Controller
@@ -59,10 +60,10 @@ class DocumentCandidatureController extends Controller
 
         $offres = OffreRecrutement::orderBy('intitule_poste')->get(['id_offre', 'reference_offre', 'intitule_poste']);
         $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
-
-        // Adaptez le filtre ci-dessous si la table `referentiels` regroupe plusieurs
-        // catégories (ex : ->where('categorie', 'type_document')).
-        $typesDocument = Referentiel::orderBy('libelle')->get(['id_ref', 'libelle']);
+        $typesDocument = Referentiel::where('type_ref', 'TYPE_DOCUMENT')
+            ->where('actif', 1)
+            ->orderBy('libelle')
+            ->get(['id_ref', 'libelle']);
 
         return view('documents.index', compact('documents', 'offres', 'diplomes', 'typesDocument', 'filtres'));
     }
@@ -72,13 +73,15 @@ class DocumentCandidatureController extends Controller
      * Formats autorisés : PDF, JPG, PNG, DOCX (§10 Gestion documentaire).
      *
      * Le type de document est une référence vers `referentiels` (id_type_document),
-     * et non une chaîne libre : la table `documents_candidature` n'a pas de colonne
-     * `type_document`.
+     * catégorie `TYPE_DOCUMENT` (photo, CV, copie CIN, diplôme...).
      */
     public function store(Request $request, Candidature $candidature): RedirectResponse
     {
         $data = $request->validate([
-            'id_type_document' => ['required', 'integer', 'exists:referentiels,id_ref'],
+            'id_type_document' => [
+                'required', 'integer',
+                Rule::exists('referentiels', 'id_ref')->where('type_ref', 'TYPE_DOCUMENT')->where('actif', 1),
+            ],
             'fichier' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png,docx', 'max:10240'],
             'observation' => ['nullable', 'string'],
         ]);
