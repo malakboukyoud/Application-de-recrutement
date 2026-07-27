@@ -15,9 +15,9 @@
 
     height:calc(100vh - 75px);
 
-    background:#ffffff;
+    background:var(--white);
 
-    border-right:1px solid #E5E7EB;
+    border-right:1px solid var(--border);
 
     position:fixed;
 
@@ -46,7 +46,7 @@
 
     gap:15px;
 
-    border-bottom:1px solid #E5E7EB;
+    border-bottom:1px solid var(--border);
 
 }
 
@@ -65,7 +65,7 @@
 
     font-size:20px;
 
-    color:#15803D;
+    color:var(--green);
 
     font-weight:700;
 
@@ -110,7 +110,7 @@
     text-decoration:none;
 
 
-    color:#4B5563;
+    color:var(--text-light);
 
 
     border-radius:12px;
@@ -140,9 +140,9 @@
 
 .menu li a:hover{
 
-    background:#EEF7F0;
+    background:var(--green-light);
 
-    color:#15803D;
+    color:var(--green);
 
 }
 
@@ -152,9 +152,9 @@
 
 .menu li.active a{
 
-    background:#15803D;
+    background:var(--green);
 
-    color:white;
+    color:var(--white);
 
 }
 
@@ -164,14 +164,14 @@
 
 .menu li:last-child a{
 
-    color:#DC2626;
+    color:var(--red);
 
 }
 
 
 .menu li:last-child a:hover{
 
-    background:#FEE2E2;
+    background:var(--red-light);
 
 }
 
@@ -230,11 +230,10 @@
 
 }
 </style>
-</head>
-<body>
- <aside class="sidebar">
 
-    
+<aside class="sidebar">
+
+
 
     <ul class="menu">
 
