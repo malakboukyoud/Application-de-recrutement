@@ -45,82 +45,13 @@ body{
     min-height:100vh;
 }
 
-/* ===========================
-        TOPBAR
-=========================== */
-
-.topbar{
-
-    height:70px;
-    background:white;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:0 30px;
-
-    border-bottom:1px solid var(--border);
-}
-
-.topbar-left{
-
-    display:flex;
-    align-items:center;
-    gap:14px;
-}
-
-.topbar-logo{
-    text-align: center;
-    padding: 20px 20px;
-    width: 130px;
-    max-width: 100%;
-    height: auto;
-    display: block;
-   
-}
-
-.topbar-left h5{
-    color:var(--green);
-    margin:0;
-    font-size:16px;
-    
-}
-
-
-.user{
-
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
-
-.avatar{
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    background:var(--blue);
-
-    color:white;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-weight:bold;
-}
 
 /* ===========================
         CONTENT
 =========================== */
 
 .content{
-
+    padding-top:700px;
     max-width:1200px;
 
     margin:auto;
@@ -458,38 +389,10 @@ hr{
 
 <body>
 
+
 <div class="main">
 
-    <!-- Topbar -->
-
-    <div class="topbar">
-
-        <div class="topbar-left">
-
-            <img src="{{ asset('image/ormvaa.png') }}"
-                 class="topbar-logo">
-
-            <h5>
-                Office Régional de Mise en Valeur Agricole
-                du Souss Massa
-            </h5>
-
-        </div>
-
-        <div class="user">
-
-            <i class="bi bi-bell fs-5"></i>
-
-            <div class="avatar">
-
-                RH
-
-            </div>
-
-        </div>
-
-    </div>
-
+   
     <!-- Contenu -->
 
     <div class="content">

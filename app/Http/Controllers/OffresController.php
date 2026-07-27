@@ -157,14 +157,32 @@ class OffresController extends Controller
     /**
      * Supprimer une offre
      */
-    public function destroy($id)
+    /**
+ * Supprimer une offre
+ */
+public function destroy($id)
 {
     $offre = Offre::findOrFail($id);
 
+    // Vérifier si l'offre possède des candidatures
+    if ($offre->candidatures()->exists()) {
+
+        return redirect()
+            ->route('offres.index')
+            ->with(
+                'error',
+                'Impossible de supprimer cette offre car elle possède déjà des candidatures.'
+            );
+    }
+
+    // Si aucune candidature n'est liée à l'offre
     $offre->delete();
 
     return redirect()
         ->route('offres.index')
-        ->with('success', 'Offre supprimée avec succès.');
+        ->with(
+            'success',
+            'Offre supprimée avec succès.'
+        );
 }
 }

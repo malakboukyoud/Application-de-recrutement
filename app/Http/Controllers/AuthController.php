@@ -41,10 +41,7 @@ class AuthController extends Controller
             ->where('utilisateurs.login', $request->login)
             ->where('utilisateurs.mot_de_passe', $request->password)
             ->first();
-            session([
-                'user' => $user
-            ]);
-
+            
 
         if ($user) {
 
@@ -97,4 +94,5 @@ class AuthController extends Controller
         return redirect()->route('login.form')
                          ->with('success', 'Compte créé avec succès.');
     }
+    
 }

@@ -665,7 +665,7 @@ Inactif
 <div class="buttons">
 
 
-<a href="{{ route('utilisateurs.show',$utilisateur->id_utilisateur) }}"
+<a href="{{ route('utilisateurs.index',$utilisateur->id_utilisateur) }}"
 class="btn-cancel">
 
 

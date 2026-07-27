@@ -13,6 +13,7 @@ use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\DocumentCandidatureController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HistoriqueActionController;
+use App\Http\Controllers\ConvocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +30,8 @@ Route::post('/login', [AuthController::class, 'login'])
     ->name('login');
 
 
-Route::get('/logout', [AuthController::class, 'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
-
 
 Route::post('/register', [AuthController::class, 'register'])
     ->name('register');
@@ -100,9 +100,6 @@ Route::get('/parametres', [ParametresController::class, 'index'])
 
 // À insérer dans routes/web.php de votre projet Laravel.
 // Ajoutez ->middleware(['auth']) (et une policy par profil) selon §11 du cahier des charges.
-
-/*Route::redirect('/', '/candidatures');
-
 Route::resource('candidats', CandidatController::class);
 
 
@@ -130,10 +127,35 @@ Route::get('evaluations/{evaluation}/edit', [EvaluationController::class, 'edit'
 Route::put('evaluations/{evaluation}', [EvaluationController::class, 'update'])
     ->name('evaluations.update');
 Route::delete('evaluations/{evaluation}', [EvaluationController::class, 'destroy'])
-    ->name('evaluations.destroy');*/
+    ->name('evaluations.destroy');
 
 
 
 
 // Historique des actions — journal d'audit (§12)
 Route::get('historique', [HistoriqueActionController::class, 'index'])->name('historique.index');
+
+
+Route::get('/dashboard/export/excel', [DashboardController::class, 'exportExcel'])
+    ->name('dashboard.export.excel');
+
+Route::get('/dashboard/export/pdf', [DashboardController::class, 'exportPdf'])
+    ->name('dashboard.export.pdf');
+
+
+Route::get('/test-gd', function () {
+    return extension_loaded('gd') ? 'GD OK' : 'GD ABSENT';
+});
+
+Route::get('/php-test', function () {
+
+    return [
+        'php_ini' => php_ini_loaded_file(),
+        'extension_dir' => ini_get('extension_dir'),
+        'gd_loaded' => extension_loaded('gd'),
+        'gd_info' => function_exists('gd_info'),
+        'loaded_extensions' => get_loaded_extensions(),
+    ];
+
+});
+Route::resource('convocations', ConvocationController::class);

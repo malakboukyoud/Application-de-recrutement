@@ -46,8 +46,8 @@ body{
 
 .login-card{
     position:relative;
-    width:850px;
-    height:550px;
+    width:870px;
+    height:570px;
     background:#fff;
     margin:20px;
     border-radius:30px;

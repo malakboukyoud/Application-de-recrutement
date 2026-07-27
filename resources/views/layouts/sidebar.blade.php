@@ -255,7 +255,7 @@
 
 
     <li class="{{ request()->routeIs('candidats.index') ? 'active' : '' }}">
-        <a href="#">
+        <a href="{{ route('candidats.index') }}">
             <i class="bi bi-people-fill"></i>
             <span>Candidats</span>
         </a>
@@ -263,13 +263,13 @@
 
 
     <li class="{{ request()->routeIs('candidatures.index') ? 'active' : '' }}">
-        <a href="#">
+        <a href="{{ route('candidatures.index') }}">
             <i class="bi bi-file-earmark-text-fill"></i>
             <span>Candidatures</span>
         </a>
     </li>
 
-
+    
     <li>
         <a href="#">
             <i class="bi bi-folder-fill"></i>
@@ -278,8 +278,8 @@
     </li>
 
 
-    <li>
-        <a href="#">
+    <li class="{{ request()->routeIs('convocations.index') ? 'active' : '' }}">
+        <a href="{{ route('convocations.index') }}">
             <i class="bi bi-calendar-event-fill"></i>
             <span>Convocations</span>
         </a>
@@ -287,7 +287,7 @@
 
 
     <li>
-        <a href="#">
+        <a href="evaluations._form">
             <i class="bi bi-star-fill"></i>
             <span>Évaluation</span>
         </a>
@@ -309,9 +309,8 @@
         </a>
     </li>
 
-
-    <li>
-        <a href="#">
+    <li class="{{ request()->routeIs('historique.index') ? 'active' : '' }}">
+        <a href="{{ route('historique.index') }}">
             <i class="bi bi-clock-history"></i>
             <span>Historique</span>
         </a>
@@ -324,14 +323,20 @@
         <span>Paramètres</span>
     </a>
 </li>
+<li>
+    <a href="#" 
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Déconnexion</span>
+    </a>
 
-    <li>
-        <a href="{{ route('logout') }}">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Déconnexion</span>
-        </a>
-    </li>
-
+    <form id="logout-form" 
+          method="POST" 
+          action="{{ route('logout') }}" 
+          style="display:none;">
+        @csrf
+    </form>
+</li>
 </ul>
 
 

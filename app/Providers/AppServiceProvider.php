@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\Models\Candidature;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+
+            $nbNotifications = Candidature::where('etat_candidature', 'Reçue')
+                ->count();
+
+            $view->with('nbNotifications', $nbNotifications);
+
+        });
     }
 }

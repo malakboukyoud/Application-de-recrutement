@@ -2,161 +2,380 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Offre;
-use App\Models\Utilisateur;
-use App\Models\Referentiel;
+use App\Models\OffreRecrutement;
+use App\Models\Candidat;
+use App\Models\Candidature;
+use App\Models\Convocation;
+use App\Models\Evaluation;
+use App\Exports\DashboardExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Vérifier la connexion
-        if (!session()->has('user')) {
-            return redirect()->route('login.form');
+        $today = Carbon::today();
+
+        /*
+        |--------------------------------------------------------------------------
+        | OFFRES DE RECRUTEMENT
+        |--------------------------------------------------------------------------
+        */
+
+        $totalOffres = OffreRecrutement::count();
+
+        $offresOuvertes = OffreRecrutement::where(
+            'statut',
+            'Ouverte'
+        )->count();
+
+        $offresFermees = OffreRecrutement::where(
+            'statut',
+            'Fermée'
+        )->count();
+
+        $offresExpirentBientot = OffreRecrutement::where(
+                'statut',
+                'Ouverte'
+            )
+            ->whereBetween(
+                'date_limite_depot',
+                [
+                    $today,
+                    $today->copy()->addDays(7)
+                ]
+            )
+            ->count();
+
+        $prochaineExpiration = OffreRecrutement::where(
+                'statut',
+                'Ouverte'
+            )
+            ->whereDate(
+                'date_limite_depot',
+                '>=',
+                $today
+            )
+            ->orderBy('date_limite_depot')
+            ->first();
+
+        $offresRecentes = OffreRecrutement::orderBy(
+                'date_publication',
+                'desc'
+            )
+            ->take(5)
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | CANDIDATS
+        |--------------------------------------------------------------------------
+        */
+
+        $totalCandidats = Candidat::count();
+
+        /*
+         | Si ta table candidats ne possède pas created_at,
+         | cette statistique restera à 0.
+         */
+
+        $nouveauxCandidats = 0;
+
+        if (
+            \Schema::hasColumn(
+                'candidats',
+                'created_at'
+            )
+        ) {
+
+            $nouveauxCandidats = Candidat::whereDate(
+                'created_at',
+                $today
+            )->count();
         }
 
         /*
         |--------------------------------------------------------------------------
-        | OFFRES
+        | DOSSIERS DE CANDIDATURE
         |--------------------------------------------------------------------------
         */
 
-        $totalOffres = Offre::count();
+        $dossiersComplets = Candidature::where(
+            'dossier_complet',
+            true
+        )->count();
 
-        $offresOuvertes = Offre::where('statut', 'Ouverte')->count();
+        $dossiersIncomplets = Candidature::where(
+            'dossier_complet',
+            false
+        )->count();
 
-        $offresCloturees = Offre::where('statut', 'Fermée')->count();
+        $dossiersAArchiver = Candidature::where(
+            'etat_candidature',
+            'Archivée'
+        )->count();
+                /*
+        |--------------------------------------------------------------------------
+        | CANDIDATURES
+        |--------------------------------------------------------------------------
+        */
 
-        $dernieresOffres = Offre::orderBy('id_offre', 'desc')
-                                ->take(5)
-                                ->get();
+        $totalCandidatures = Candidature::count();
 
-        $offresExpiration = Offre::whereDate(
-                'date_limite_depot',
-                '<=',
-                Carbon::today()->addDays(7)
-            )
-            ->where('statut', 'Ouverte')
-            ->count();
+        $candidaturesEnAttente = Candidature::where(
+            'etat_candidature',
+            "En cours d'étude"
+        )->count();
 
+        $candidaturesValidees = Candidature::where(
+            'etat_candidature',
+            'Admise'
+        )->count();
+
+        $candidaturesRejetees = Candidature::where(
+            'etat_candidature',
+            'Rejetée'
+        )->count();
+
+        $preselectionnes = Candidature::where(
+            'etat_candidature',
+            'Présélectionnée'
+        )->count();
+
+        $convoques = Candidature::where(
+            'etat_candidature',
+            'Convoquée'
+        )->count();
 
         /*
         |--------------------------------------------------------------------------
-        | UTILISATEURS
+        | CANDIDATURES RÉCENTES
         |--------------------------------------------------------------------------
         */
 
-        $totalUtilisateurs = Utilisateur::count();
-
-        $utilisateursActifs = Utilisateur::where('actif', 1)->count();
-
-        $derniersUtilisateurs = Utilisateur::with('profil')
-                                ->orderBy('id_utilisateur', 'desc')
-                                ->take(5)
-                                ->get();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | REFERENTIELS
-        |--------------------------------------------------------------------------
-        */
-
-        $totalReferentiels = Referentiel::count();
-
-        $profils = Utilisateur::join(
-                'referentiels',
-                'utilisateurs.id_profil',
-                '=',
-                'referentiels.id_ref'
-            )
-            ->selectRaw('referentiels.libelle, COUNT(*) as total')
-            ->groupBy('referentiels.libelle')
+        $candidaturesRecentes = Candidature::with([
+                'candidat',
+                'offre'
+            ])
+            ->orderBy('date_depot', 'desc')
+            ->take(5)
             ->get();
 
-
         /*
         |--------------------------------------------------------------------------
-        | MODULES NON ENCORE CRÉÉS
+        | CONVOCATIONS
         |--------------------------------------------------------------------------
         */
 
-        $totalCandidats = 0;
+        $totalConvocations = Convocation::count();
 
-        $totalCandidatures = 0;
+        $convocationsAujourdhui = Convocation::whereDate(
+            'date_convocation',
+            $today
+        )->count();
 
-        $totalConvocations = 0;
+        $convocationsSemaine = Convocation::whereBetween(
+            'date_convocation',
+            [
+                $today,
+                $today->copy()->addDays(7)
+            ]
+        )->count();
 
-        $totalDocuments = 0;
-
-        $dossiersComplets = 0;
-
-        $dossiersIncomplets = 0;
-
-        $preselectionnes = 0;
-
-        $rejetes = 0;
-
-        $admis = 0;
-
-        $recrutementsFinalises = 0;
-
-        $candidaturesAttente = 0;
-
-        $convocationsAVenir = 0;
-
-        $dossiersArchivage = 0;
-
-        $candidaturesParOffre = 0;
-
+        $convocationsAVenir = Convocation::whereDate(
+            'date_convocation',
+            '>',
+            $today
+        )->count();
 
         /*
         |--------------------------------------------------------------------------
-        | RETOUR
+        | ÉVALUATIONS
         |--------------------------------------------------------------------------
         */
-        
-    // Total notifications
-    $notifications = $totalCandidatures;
 
+        $totalEvaluations = Evaluation::count();
+
+        /*
+         | La table evaluations ne contient pas
+         | decision_finale.
+         | On récupère donc ces statistiques
+         | depuis la table candidatures.
+         */
+
+        $admis = Candidature::where(
+            'etat_candidature',
+            'Admise'
+        )->count();
+
+        $listeAttente = Candidature::where(
+            'etat_candidature',
+            "Liste d'attente"
+        )->count();
+
+        $nonAdmis = Candidature::where(
+            'etat_candidature',
+            'Non admise'
+        )->count();
+
+        $rejetes = $candidaturesRejetees;
+
+        $recrutementsFinalises =
+            $admis +
+            $nonAdmis;
+
+        /*
+        |--------------------------------------------------------------------------
+        | NOTIFICATIONS
+        |--------------------------------------------------------------------------
+        */
+
+        $nbNotifications =
+            $candidaturesEnAttente
+            + $dossiersIncomplets
+            + $offresExpirentBientot
+            + $convocationsAVenir;
+                    /*
+        |--------------------------------------------------------------------------
+        | GRAPHIQUE 1 : CANDIDATURES PAR MOIS
+        |--------------------------------------------------------------------------
+        */
+
+        $candidaturesParMois = Candidature::select(
+                DB::raw('MONTH(date_depot) as mois'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy(DB::raw('MONTH(date_depot)'))
+            ->orderBy(DB::raw('MONTH(date_depot)'))
+            ->pluck('total', 'mois')
+            ->toArray();
+
+        $labels = [];
+        $data = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+
+            $labels[] = Carbon::create()
+                ->month($i)
+                ->locale('fr')
+                ->translatedFormat('M');
+
+            $data[] = $candidaturesParMois[$i] ?? 0;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | GRAPHIQUE 2 : ÉTAT DES CANDIDATS
+        |--------------------------------------------------------------------------
+        */
+
+        $repartitionCandidatures = [
+
+            $preselectionnes,
+            $rejetes,
+            $convoques,
+            $admis
+
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETOUR DE LA VUE
+        |--------------------------------------------------------------------------
+        */
 
         return view('dashboard.index', compact(
 
+            // OFFRES
             'totalOffres',
             'offresOuvertes',
-            'offresCloturees',
-            'offresExpiration',
-            'dernieresOffres',
+            'offresFermees',
+            'offresExpirentBientot',
+            'prochaineExpiration',
+            'offresRecentes',
 
-            'totalUtilisateurs',
-            'utilisateursActifs',
-            'derniersUtilisateurs',
-
-            'totalReferentiels',
-            'profils',
-
+            // CANDIDATS
             'totalCandidats',
-            'totalCandidatures',
-            'totalConvocations',
-            'totalDocuments',
+            'nouveauxCandidats',
 
+            // DOSSIERS
             'dossiersComplets',
             'dossiersIncomplets',
+            'dossiersAArchiver',
+
+            // CANDIDATURES
+            'totalCandidatures',
+            'candidaturesEnAttente',
+            'candidaturesValidees',
+            'candidaturesRejetees',
+            'candidaturesRecentes',
 
             'preselectionnes',
+            'convoques',
             'rejetes',
-            'admis',
 
-            'recrutementsFinalises',
-
-            'candidaturesAttente',
+            // CONVOCATIONS
+            'totalConvocations',
+            'convocationsAujourdhui',
+            'convocationsSemaine',
             'convocationsAVenir',
 
-            'dossiersArchivage',
-            'notifications',
+            // ÉVALUATIONS
+            'totalEvaluations',
+            'admis',
+            'listeAttente',
+            'nonAdmis',
+            'recrutementsFinalises',
 
-            'candidaturesParOffre'
+            // NOTIFICATIONS
+            'nbNotifications',
+
+            // GRAPHIQUES
+            'labels',
+            'data',
+            'repartitionCandidatures'
+
         ));
+    }
+        /*
+    |--------------------------------------------------------------------------
+    | EXPORT EXCEL
+    |--------------------------------------------------------------------------
+    */
+
+    public function exportExcel()
+    {
+        return Excel::download(
+            new DashboardExport(),
+            'dashboard_recrutement.xlsx'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | EXPORT PDF
+    |--------------------------------------------------------------------------
+    */
+
+    public function exportPdf()
+    {
+        $candidatures = Candidature::with([
+                'candidat',
+                'offre'
+            ])
+            ->orderBy('date_depot', 'desc')
+            ->get();
+
+        $pdf = Pdf::loadView(
+            'dashboard.pdf',
+            compact('candidatures')
+        );
+
+        return $pdf->download(
+            'rapport_recrutement.pdf'
+        );
     }
 }

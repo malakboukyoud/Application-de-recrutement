@@ -9,6 +9,9 @@
 
 <title>@yield('title','ORMVASM')</title>
 
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet"
@@ -25,13 +28,10 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 }
 
 
-body{
-
-    font-family:Arial,sans-serif;
-
-    background:#F6F8FB;
-
-}
+  body { background:#f5f6f8; }
+        .navbar-brand small { display:block; font-size:.7rem; opacity:.8; }
+        .badge-etat { font-size:.8rem; }
+        table.table-hover tbody tr { cursor: pointer; }
 
 
 /* Zone générale */
@@ -72,11 +72,11 @@ body{
     width:calc(100% - 260px);
 
     min-height:100vh;
-
+    margin-top:120px;
 }
 
 .main{
-
+    
     margin-left:260px;
 
     width:calc(100% - 260px);
@@ -94,7 +94,9 @@ body{
 
 
 <body>
-
+@php
+    $profil = session('user')->profil ?? '';
+@endphp
 
 <div class="app-container">
 

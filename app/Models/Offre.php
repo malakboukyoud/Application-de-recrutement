@@ -6,16 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Offre extends Model
 {
-    // Nom de la table dans MySQL
     protected $table = 'offres_recrutement';
 
-    // Clé primaire
     protected $primaryKey = 'id_offre';
 
-    // Laravel ne doit pas chercher created_at / updated_at
     public $timestamps = false;
 
-    // Champs autorisés pour create() et update()
     protected $fillable = [
         'reference_offre',
         'intitule_poste',
@@ -31,6 +27,15 @@ class Offre extends Model
         'statut',
         'description_poste',
         'conditions_participation',
-        'observations'
+        'observations',
     ];
+
+    public function candidatures()
+    {
+        return $this->hasMany(
+            Candidature::class,
+            'id_offre',
+            'id_offre'
+        );
+    }
 }

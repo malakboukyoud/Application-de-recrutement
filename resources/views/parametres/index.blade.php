@@ -47,7 +47,7 @@
 
 .settings-container{
 
-    padding-top:100px;
+    padding-top:10px;
 
 }
 
@@ -57,7 +57,7 @@
 
 .settings-title{
 
-    color:black;
+    color: #000000;
 
     font-size:28px;
 
@@ -203,9 +203,9 @@
 
     border-radius:10px;
 
-    background:orange;
-
-    color:white;
+    
+    background:#DCFCE7;
+    color:#16A34A;
 
     font-size:14px;
 
@@ -286,115 +286,14 @@
 }
 
 }
-/* ===========================
-        TOPBAR
-=========================== */
 
-.topbar{
-
-    height:70px;
-
-    width:100%;
-
-    background:#fff;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:0 30px;
-
-    border-bottom:1px solid var(--border);
-
-    position:fixed;
-
-    top:0;
-
-    left:0;
-
-    right:0;
-
-    z-index:1100;
-    
-}
-.topbar-left{
-
-    display:flex;
-
-    align-items:center;
-
-    
-
-}
-
-.topbar-logo{
-    text-align: center;
-    padding: 20px 20px;
-    width: 130px;
-    max-width: 100%;
-    height: auto;
-    display: block;
-   }
-.topbar-left h5{
-
-    color:var(--green);
-
-    margin:0;
-
-    font-size:16px;
-
-    font-weight:600;
-
-}
-
-.user{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:15px;
-
-}
-
-.avatar{
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:50%;
-
-    background:var(--blue);
-
-    color:#fff;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-weight:bold;
-
-}
  </style>
 </head>
 <body>
 @extends('layouts.app')
-
+@include('layouts.topbar')
 @section('content')
-<div class="topbar"> 
-    <div class="topbar-left">
-         <img src="{{ asset('image/ormvaa.png') }}" class="topbar-logo"> 
-         <h5> Office Régional de Mise en Valeur Agricole du Souss Massa </h5> 
-    </div>
-    <div class="user">
-         <i class="bi bi-bell fs-5"></i> <div class="avatar"> RH </div> 
-    </div>
- </div>
+
 <div class="settings-container">
 
 

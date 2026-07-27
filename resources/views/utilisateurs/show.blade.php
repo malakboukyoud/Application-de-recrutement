@@ -258,25 +258,38 @@ gap:15px;
 
 .btn-return{
 
-background:#F3F4F6;
+    background:white;
 
-color:#374151;
+    color:var(--orange);
 
-padding:12px 25px;
+    border:2px solid var(--orange);
 
-border-radius:10px;
+    padding:12px 30px;
 
-text-decoration:none;
+    border-radius:10px;
 
-font-weight:600;
+    text-decoration:none;
 
+    font-weight:600;
+
+    transition:.30s;
+
+}
+
+.btn-return:hover{
+
+   background:var(--orange);
+
+    color:white;
+
+    transform:translateY(-2px);
 }
 
 
 
 .btn-edit{
 
-background:var(--orange);
+background:var(--green);
 
 color:white;
 
