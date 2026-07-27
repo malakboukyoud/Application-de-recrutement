@@ -35,8 +35,8 @@
                 <h6 class="text-muted">Formation &amp; expérience</h6>
                 <table class="table table-sm mb-0">
                     <tr><th style="width:40%">Niveau d'étude</th><td>{{ $candidat->niveau_etude }}</td></tr>
-                    <tr><th>Diplôme</th><td>{{ $candidat->diplome }}</td></tr>
-                    <tr><th>Spécialité</th><td>{{ $candidat->specialite }}</td></tr>
+                    <tr><th>Diplôme</th><td>{{ $candidat->id_diplome }}</td></tr>
+                    <tr><th>Spécialité</th><td>{{ $candidat->id_specialite }}</td></tr>
                     <tr><th>Établissement</th><td>{{ $candidat->etablissement }}</td></tr>
                     <tr><th>Année d'obtention</th><td>{{ $candidat->annee_obtention }}</td></tr>
                     <tr><th>Expérience</th><td>{{ $candidat->experience }}</td></tr>

@@ -20,6 +20,36 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 <style>
 
+:root{
+    --green:#15803D;
+    --green-dark:#166534;
+    --green-light:#DCFCE7;
+
+    --orange:#F97316;
+    --orange-dark:#EA580C;
+    --orange-light:#FFEDD5;
+
+    --blue:#0284C7;
+    --blue-dark:#0369A1;
+    --blue-light:#E0F2FE;
+
+    --red:#DC2626;
+    --red-light:#FEE2E2;
+
+    --bg:#F5F7F6;
+    --white:#FFFFFF;
+
+    --text:#1F2937;
+    --text-dark:#17324D;
+    --text-light:#6B7280;
+
+    --border:#E5E7EB;
+
+    --shadow:0 8px 25px rgba(0,0,0,.06);
+
+    --radius:16px;
+}
+
 
 *{
     margin:0;
@@ -28,10 +58,54 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 }
 
 
-  body { background:#f5f6f8; }
+  body {
+    background:var(--bg);
+    color:var(--text);
+  }
         .navbar-brand small { display:block; font-size:.7rem; opacity:.8; }
         .badge-etat { font-size:.8rem; }
         table.table-hover tbody tr { cursor: pointer; }
+
+/* Cartes : cohérentes avec la palette (fond blanc, bordure douce, ombre légère, coins arrondis) */
+.card{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+}
+
+/* Boutons : alignés sur la palette au lieu du bleu/vert par défaut de Bootstrap */
+.btn-success{
+    background-color:var(--green);
+    border-color:var(--green);
+}
+.btn-success:hover{
+    background-color:var(--green-dark);
+    border-color:var(--green-dark);
+}
+.btn-outline-primary{
+    color:var(--blue);
+    border-color:var(--blue);
+}
+.btn-outline-primary:hover{
+    background-color:var(--blue);
+    border-color:var(--blue);
+}
+.btn-outline-danger{
+    color:var(--red);
+    border-color:var(--red);
+}
+.btn-outline-danger:hover{
+    background-color:var(--red);
+    border-color:var(--red);
+}
+
+/* Badges d'état : mêmes teintes que le reste de l'app */
+.badge.bg-success{ background-color:var(--green) !important; }
+.badge.bg-info{ background-color:var(--blue) !important; color:var(--white) !important; }
+.badge.bg-warning{ background-color:var(--orange) !important; color:var(--white) !important; }
+.badge.bg-danger{ background-color:var(--red) !important; }
+.badge.bg-secondary{ background-color:var(--text-light) !important; }
 
 
 /* Zone générale */
@@ -57,7 +131,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     left:0;
 
-    background:#15803D;
+    background:var(--green);
 
 }
 
@@ -72,16 +146,20 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     width:calc(100% - 260px);
 
     min-height:100vh;
-    margin-top:120px;
+
+    padding:32px;
+
 }
 
 .main{
-    
+
     margin-left:260px;
 
     width:calc(100% - 260px);
 
     min-height:100vh;
+
+    padding:32px;
 
 }
 
@@ -94,9 +172,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 
 <body>
-@php
-    $profil = session('user')->profil ?? '';
-@endphp
+
 
 <div class="app-container">
 
@@ -113,8 +189,9 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
 
 </body>
-
 
 </html>

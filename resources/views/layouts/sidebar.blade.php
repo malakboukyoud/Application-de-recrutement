@@ -269,9 +269,12 @@
         </a>
     </li>
 
-    
-    <li>
-        <a href="#">
+
+
+
+    <li class="{{ request()->routeIs('documents.index') ? 'active' : '' }}">
+        <a href="{{ route('documents.index') }}">
+
             <i class="bi bi-folder-fill"></i>
             <span>Documents</span>
         </a>
@@ -286,8 +289,8 @@
     </li>
 
 
-    <li>
-        <a href="evaluations._form">
+    <li class="{{ request()->routeIs('evaluations.index') ? 'active' : '' }}">
+        <a href="{{ route('evaluations.index') }}">
             <i class="bi bi-star-fill"></i>
             <span>Évaluation</span>
         </a>

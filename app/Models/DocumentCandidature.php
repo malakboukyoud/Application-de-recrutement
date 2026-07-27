@@ -42,4 +42,8 @@ class DocumentCandidature extends Model
     {
         return $this->belongsTo(Utilisateur::class, 'ajoute_par', 'id_utilisateur');
     }
+    public function typeDocument()
+    {
+    return $this->belongsTo(Referentiel::class, 'id_type_document', 'id_ref');
+    }
 }

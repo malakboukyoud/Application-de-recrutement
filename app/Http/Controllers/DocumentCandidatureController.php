@@ -1,16 +1,72 @@
 <?php
+// Destination : app/Http/Controllers/DocumentCandidatureController.php
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\DocumentCandidature;
 use App\Models\HistoriqueAction;
+use App\Models\OffreRecrutement;
+use App\Models\Referentiel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class DocumentCandidatureController extends Controller
 {
+    /**
+     * Liste globale des documents déposés, toutes candidatures / offres confondues.
+     * Filtrable par offre, candidat (nom/prénom/CIN), diplôme et type de document.
+     * Triable par date d'ajout ou nom de fichier.
+     */
+    public function index(Request $request): View
+    {
+        $filtres = array_merge(
+            ['id_offre' => null, 'id_diplome' => null, 'candidat' => null, 'id_type_document' => null, 'tri' => 'date_ajout', 'direction' => 'desc'],
+            $request->only(['id_offre', 'id_diplome', 'candidat', 'id_type_document', 'tri', 'direction'])
+        );
+
+        // Colonnes autorisées pour le tri, afin d'éviter toute injection via le paramètre "tri"
+        $colonnesTriables = ['date_ajout', 'nom_fichier'];
+        $tri = in_array($filtres['tri'], $colonnesTriables, true) ? $filtres['tri'] : 'date_ajout';
+        $direction = $filtres['direction'] === 'asc' ? 'asc' : 'desc';
+        $filtres['tri'] = $tri;
+        $filtres['direction'] = $direction;
+
+        $documents = DocumentCandidature::query()
+            ->with(['candidature.candidat', 'candidature.offre', 'typeDocument'])
+            ->whereHas('candidature', function ($q) use ($filtres) {
+                $q->when($filtres['id_offre'], fn ($qq, $v) => $qq->where('id_offre', $v));
+
+                $q->when($filtres['candidat'], function ($qq, $v) {
+                    $qq->whereHas('candidat', function ($qqq) use ($v) {
+                        $qqq->where('nom', 'like', "%{$v}%")
+                            ->orWhere('prenom', 'like', "%{$v}%")
+                            ->orWhere('cin', 'like', "%{$v}%");
+                    });
+                });
+
+                $q->when($filtres['id_diplome'], function ($qq, $v) {
+                    $qq->whereHas('candidat', fn ($qqq) => $qqq->where('id_diplome', $v));
+                });
+            })
+            ->when($filtres['id_type_document'], fn ($q, $v) => $q->where('id_type_document', $v))
+            ->orderBy($tri, $direction)
+            ->paginate(15)
+            ->withQueryString();
+
+        $offres = OffreRecrutement::orderBy('intitule_poste')->get(['id_offre', 'reference_offre', 'intitule_poste']);
+        $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
+
+        // Adaptez le filtre ci-dessous si la table `referentiels` regroupe plusieurs
+        // catégories (ex : ->where('categorie', 'type_document')).
+        $typesDocument = Referentiel::orderBy('libelle')->get(['id_ref', 'libelle']);
+
+        return view('documents.index', compact('documents', 'offres', 'diplomes', 'typesDocument', 'filtres'));
+    }
+
     /**
      * Ajouter une pièce jointe à une candidature (§6.4 Gestion des pièces jointes).
      * Formats autorisés : PDF, JPG, PNG, DOCX (§10 Gestion documentaire).

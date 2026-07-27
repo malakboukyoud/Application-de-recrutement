@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OffresController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ParametresController;
+use App\Http\Controllers\ParametreController;
 
 use App\Http\Controllers\CandidatController;
 use App\Http\Controllers\CandidatureController;
@@ -94,8 +94,11 @@ Route::put('/utilisateurs/{id}/desactiver',
     
 
 
-Route::get('/parametres', [ParametresController::class, 'index'])
-    ->name('parametres.index');
+Route::get('parametres', [ParametreController::class, 'index'])->name('parametres.index');
+Route::post('parametres/referentiels', [ParametreController::class, 'storeReferentiel'])->name('parametres.referentiels.store');
+Route::patch('parametres/referentiels/{referentiel}/toggle', [ParametreController::class, 'toggleReferentiel'])->name('parametres.referentiels.toggle');
+Route::put('parametres/organisme', [ParametreController::class, 'updateOrganisme'])->name('parametres.organisme.update');
+Route::post('parametres/preferences', [ParametreController::class, 'updatePreferences'])->name('parametres.preferences.update');
 
 
 // À insérer dans routes/web.php de votre projet Laravel.
@@ -159,3 +162,6 @@ Route::get('/php-test', function () {
 
 });
 Route::resource('convocations', ConvocationController::class);
+Route::get('evaluations', [EvaluationController::class, 'index'])->name('evaluations.index');
+Route::get('documents', [DocumentCandidatureController::class, 'index'])->name('documents.index');
+

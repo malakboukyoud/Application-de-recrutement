@@ -59,11 +59,11 @@
     </div>
     <div class="col-md-3">
         <label class="form-label">Diplôme principal</label>
-        <input type="text" name="diplome" value="{{ $old('diplome') }}" class="form-control">
+        <input type="text" name="id_diplome" value="{{ $old('id_diplome') }}" class="form-control">
     </div>
     <div class="col-md-3">
         <label class="form-label">Spécialité</label>
-        <input type="text" name="specialite" value="{{ $old('specialite') }}" class="form-control">
+        <input type="text" name="id_specialite" value="{{ $old('id_specialite') }}" class="form-control">
     </div>
     <div class="col-md-3">
         <label class="form-label">Année d'obtention</label>

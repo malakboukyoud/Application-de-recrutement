@@ -88,8 +88,8 @@
                         <td>{{ $candidat->cin }}</td>
                         <td>{{ $candidat->nom_complet }}</td>
                         <td>{{ $candidat->ville }}</td>
-                        <td>{{ $candidat->diplome }}</td>
-                        <td>{{ $candidat->specialite }}</td>
+                        <td>{{ $candidat->id_diplome }}</td>
+                        <td>{{ $candidat->id_specialite }}</td>
                         <td><span class="badge bg-secondary">{{ $candidat->candidatures_count }}</span></td>
                         <td class="text-end" onclick="event.stopPropagation()">
                             <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-sm btn-outline-primary">Modifier</a>

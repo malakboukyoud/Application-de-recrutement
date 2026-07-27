@@ -1,479 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Paramètre d'utilisateur</title>
- <style>
-  /* ==============================
-        PAGE PARAMETRES
-============================== */
-
-:root {
-
-    /* Couleurs principales ORMVASM */
-    --green: #15803D;
-    --green-dark: #166534;
-    --green-light: #DCFCE7;
-
-
-    /* Couleurs secondaires */
-    --blue: #2563EB;
-    --blue-light: #DBEAFE;
-
-
-    /* Arrière-plans */
-    --background: #F8FAFC;
-    --white: #FFFFFF;
-
-
-    /* Texte */
-    --text-dark: #1F2937;
-    --text-gray: #64748B;
-
-
-    /* Bordures */
-    --border: #E5E7EB;
-
-
-    /* Ombres */
-    --shadow: 0 10px 30px rgba(0,0,0,0.08);
-
-}
-/* ==========================
-       PARAMETRES SIMPLE
-========================== */
-
-
-.settings-container{
-
-    padding-top:10px;
-
-}
-
-
-
-/* TITRE */
-
-.settings-title{
-
-    color: #000000;
-
-    font-size:28px;
-
-    font-weight:700;
-
-    margin-bottom:30px;
-    margin-left:30px;
-
-}
-
-
-
-/* GRID */
-
-.settings-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:30px;
-    margin-left:100px;
-    margin-right:100px;
-
-}
-
-
-
-
-/* CARTE */
-
-.settings-card{
-
-    background:rgba(255,255,255,0.85);
-
-    border-radius:16px;
-
-    padding:25px;
-
-    border:1px solid rgba(229,231,235,0.8);
-
-    box-shadow:0 5px 15px rgba(0,0,0,0.06);
-
-    transition:.3s;
-
-}
-
-
-
-/* HOVER */
-
-.settings-card:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:0 8px 20px rgba(0,0,0,0.10);
-
-}
-
-
-
-
-/* HEADER */
-
-.settings-header{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
-}
-
-
-
-
-/* ICONES */
-
-.settings-icon{
-
-    width:55px;
-
-    height:55px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    font-size:24px;
-
-    background:rgba(21,128,61,0.12);
-
-    color:var(--green);
-
-}
-
-
-
-/* TITRE CARTE */
-
-.settings-card h5{
-
-    margin:0;
-
-    font-size:18px;
-
-    color:#1F2937;
-
-    font-weight:600;
-
-}
-
-
-
-/* DESCRIPTION */
-
-.settings-card p{
-
-    margin-top:15px;
-
-    color:#64748B;
-
-    font-size:14px;
-
-}
-
-
-
-/* BOUTON */
-
-.settings-btn{
-
-    margin-top:15px;
-
-    padding:10px 20px;
-
-    border:none;
-
-    border-radius:10px;
-
-    
-    background:#DCFCE7;
-    color:#16A34A;
-
-    font-size:14px;
-
-    transition:.3s;
-
-}
-
-
-
-.settings-btn:hover{
-
-    background:#166534;
-
-}
-
-
-
-/* COULEURS DES CARTES */
-
-
-/* Profil */
-
-.profile .settings-icon{
-
-    background:rgba(37,99,235,0.12);
-
-    color:#2563EB;
-
-}
-
-
-
-/* Sécurité */
-
-.security .settings-icon{
-
-    background:rgba(21,128,61,0.12);
-
-    color:#15803D;
-
-}
-
-
-
-/* Système */
-
-.system .settings-icon{
-
-    background:rgba(234,179,8,0.15);
-
-    color:#D97706;
-
-}
-
-
-
-/* Notifications */
-
-.notification .settings-icon{
-
-    background:rgba(59,130,246,0.12);
-
-    color:#3B82F6;
-
-}
-
-
-
-
-/* RESPONSIVE */
-
-@media(max-width:900px){
-
-.settings-grid{
-
-    grid-template-columns:1fr;
-
-}
-
-}
-
- </style>
-</head>
-<body>
+{{-- Destination : resources/views/parametres/index.blade.php --}}
 @extends('layouts.app')
-@include('layouts.topbar')
+@section('title', 'Paramètres')
+
 @section('content')
+    <h3 class="mb-3">Paramètres</h3>
 
-<div class="settings-container">
+    @if ($errors->any())
+        <div class="alert alert-danger py-2">
+            <ul class="mb-0 ps-3">
+                @foreach ($errors->all() as $erreur)
+                    <li>{{ $erreur }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-
-    <h2 class="settings-title">
-        <i class="bi bi-gear-fill"></i>
-        Paramètres
-    </h2>
-
-
-
-    <div class="settings-grid">
-
-
-
-        <!-- Profil utilisateur -->
-        <div class="settings-card profile">
-
-
-            <div class="settings-header">
-
-
-                <div class="settings-icon">
-                    <i class="bi bi-person-circle"></i>
-                </div>
-
-
-                <div>
-
-                    <h5>
-                        Profil utilisateur
-                    </h5>
-
-                    <p>
-                        Modifier les informations personnelles du compte.
-                    </p>
-
-                </div>
-
-
-            </div>
-
-
-
-            <button class="settings-btn">
-                Modifier le profil
+    <ul class="nav nav-tabs mb-4" id="parametresTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-referentiels" data-bs-toggle="tab" data-bs-target="#referentiels" type="button">
+                <i class="bi bi-list-check me-1"></i> Référentiels
             </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-organisme" data-bs-toggle="tab" data-bs-target="#organisme" type="button">
+                <i class="bi bi-building me-1"></i> Organisme
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-utilisateurs" data-bs-toggle="tab" data-bs-target="#utilisateurs" type="button">
+                <i class="bi bi-person-gear me-1"></i> Utilisateurs
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-affichage" data-bs-toggle="tab" data-bs-target="#affichage" type="button">
+                <i class="bi bi-sliders me-1"></i> Affichage
+            </button>
+        </li>
+    </ul>
 
+    <div class="tab-content">
 
+        {{-- ============ RÉFÉRENTIELS ============ --}}
+        <div class="tab-pane fade show active" id="referentiels">
+            <div class="card p-4">
+                <form method="GET" action="{{ route('parametres.index') }}" class="row g-2 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Catégorie</label>
+                        <select name="categorie" class="form-select" onchange="this.form.submit()">
+                            @foreach ($categories as $val => $libelle)
+                                <option value="{{ $val }}" @selected($categorie === $val)>{{ $libelle }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
+
+                <div class="table-responsive mb-3">
+                    <table class="table table-sm table-hover mb-0">
+                        <thead class="table-light">
+                        <tr><th>Libellé</th><th>Statut</th><th class="text-end">Action</th></tr>
+                        </thead>
+                        <tbody>
+                        @forelse ($referentiels as $ref)
+                            <tr>
+                                <td>{{ $ref->libelle }}</td>
+                                <td>
+                                    @if ($ref->actif)
+                                        <span class="badge bg-success">Actif</span>
+                                    @else
+                                        <span class="badge bg-secondary">Inactif</span>
+                                    @endif
+                                </td>
+                                <td class="text-end">
+                                    <form method="POST" action="{{ route('parametres.referentiels.toggle', $ref) }}" class="d-inline">
+                                        @csrf @method('PATCH')
+                                        <button class="btn btn-sm btn-outline-secondary">
+                                            {{ $ref->actif ? 'Désactiver' : 'Réactiver' }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="3" class="text-center text-muted py-3">Aucune valeur pour cette catégorie.</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr>
+                <h6 class="text-muted">Ajouter une valeur</h6>
+                <form method="POST" action="{{ route('parametres.referentiels.store') }}" class="row g-2">
+                    @csrf
+                    <input type="hidden" name="type_ref" value="{{ $categorie }}">
+                    <div class="col-md-6">
+                        <input type="text" name="libelle" class="form-control" placeholder="Nouveau libellé" required maxlength="150">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-success w-100">Ajouter</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-
-
-
-
-        <!-- Sécurité -->
-        <div class="settings-card security">
-
-
-            <div class="settings-header">
-
-
-                <div class="settings-icon">
-                    <i class="bi bi-shield-lock-fill"></i>
-                </div>
-
-
-                <div>
-
-                    <h5>
-                        Sécurité
-                    </h5>
-
-                    <p>
-                        Modifier le mot de passe et gérer la connexion.
-                    </p>
-
-                </div>
-
-
+        {{-- ============ ORGANISME ============ --}}
+        <div class="tab-pane fade" id="organisme">
+            <div class="card p-4">
+                <form method="POST" action="{{ route('parametres.organisme.update') }}" class="row g-3">
+                    @csrf @method('PUT')
+                    <div class="col-md-8">
+                        <label class="form-label">Nom de l'organisme</label>
+                        <input type="text" name="nom_organisme" value="{{ old('nom_organisme', $organisme->nom_organisme) }}" class="form-control" maxlength="150">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Sigle</label>
+                        <input type="text" name="sigle" value="{{ old('sigle', $organisme->sigle) }}" class="form-control" maxlength="20">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Adresse</label>
+                        <input type="text" name="adresse" value="{{ old('adresse', $organisme->adresse) }}" class="form-control" maxlength="255">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Téléphone</label>
+                        <input type="text" name="telephone" value="{{ old('telephone', $organisme->telephone) }}" class="form-control" maxlength="30">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" value="{{ old('email', $organisme->email) }}" class="form-control" maxlength="150">
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-success">Enregistrer</button>
+                    </div>
+                </form>
             </div>
-
-
-
-            <button class="settings-btn">
-                Changer mot de passe
-            </button>
-
-
         </div>
 
-
-
-
-
-
-        <!-- Configuration système -->
-        <div class="settings-card system">
-
-
-            <div class="settings-header">
-
-
-                <div class="settings-icon">
-                    <i class="bi bi-sliders"></i>
-                </div>
-
-
-                <div>
-
-                    <h5>
-                        Configuration système
-                    </h5>
-
-                    <p>
-                        Gérer les paramètres généraux de l'application.
-                    </p>
-
-                </div>
-
-
+        {{-- ============ UTILISATEURS ============ --}}
+        <div class="tab-pane fade" id="utilisateurs">
+            <div class="card p-4">
+                <h6 class="text-muted mb-2">Gestion des comptes utilisateurs</h6>
+                <p class="text-muted">Créez, modifiez ou désactivez les comptes du personnel RH ayant accès à l'application.</p>
+                <a href="{{ route('utilisateurs.index') }}" class="btn btn-outline-primary">
+                    <i class="bi bi-person-gear me-1"></i> Gérer les utilisateurs
+                </a>
             </div>
-
-
-
-            <button class="settings-btn">
-                Configurer
-            </button>
-
-
         </div>
 
-
-
-
-
-
-
-        <!-- Notifications -->
-        <div class="settings-card notification">
-
-
-            <div class="settings-header">
-
-
-                <div class="settings-icon">
-                    <i class="bi bi-bell-fill"></i>
-                </div>
-
-
-                <div>
-
-                    <h5>
-                        Notifications
-                    </h5>
-
-                    <p>
-                        Gérer les alertes et notifications.
-                    </p>
-
-                </div>
-
-
+        {{-- ============ AFFICHAGE ============ --}}
+        <div class="tab-pane fade" id="affichage">
+            <div class="card p-4">
+                <form method="POST" action="{{ route('parametres.preferences.update') }}" class="row g-3">
+                    @csrf
+                    <div class="col-md-6">
+                        <label class="form-label">Éléments par page (listes)</label>
+                        <select name="pagination" class="form-select">
+                            @foreach ([10, 15, 25, 50] as $valeur)
+                                <option value="{{ $valeur }}" @selected($preferences['pagination'] == $valeur)>{{ $valeur }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Densité des tableaux</label>
+                        <select name="densite" class="form-select">
+                            <option value="normal" @selected($preferences['densite'] === 'normal')>Normale</option>
+                            <option value="compacte" @selected($preferences['densite'] === 'compacte')>Compacte</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mt-4">
+                        <button class="btn btn-success">Enregistrer</button>
+                    </div>
+                </form>
             </div>
-
-
-
-            <button class="settings-btn">
-                Gérer
-            </button>
-
-
         </div>
-
-
 
     </div>
-
-
-</div>
-
 @endsection
-</body>
-</html>
+
+@push('scripts')
+    <script>
+        // Rouvre l'onglet Référentiels après un filtrage/ajout (le formulaire GET recharge la page).
+        document.addEventListener('DOMContentLoaded', function () {
+            var params = new URLSearchParams(window.location.search);
+            if (params.has('categorie')) {
+                var trigger = document.getElementById('tab-referentiels');
+                if (trigger) new bootstrap.Tab(trigger).show();
+            }
+        });
+    </script>
+@endpush

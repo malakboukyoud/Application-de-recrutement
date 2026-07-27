@@ -32,11 +32,7 @@ class Evaluation extends Model
 
     protected static function booted(): void
     {
-        // Sous MySQL/MariaDB, note_finale est une colonne générée par la base
-        // (voir la migration) : on ne la recalcule pas ici pour ne pas entrer
-        // en conflit avec la colonne STORED. Sous les autres moteurs (SQLite
-        // en développement, PostgreSQL...), on la calcule côté application
-        // pour reproduire fidèlement la même règle de gestion.
+        
         static::saving(function (Evaluation $evaluation) {
             if (DB::connection()->getDriverName() === 'mysql') {
                 return;
