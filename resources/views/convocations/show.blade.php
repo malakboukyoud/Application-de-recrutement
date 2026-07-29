@@ -613,6 +613,7 @@ Informations générales
 
     </a>
 
+    @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
     <a href="{{ route('convocations.edit',$convocation->id_convocation) }}"
        class="btn-edit">
 
@@ -640,6 +641,7 @@ Informations générales
         </button>
 
     </form>
+    @endif
 
 </div>
 

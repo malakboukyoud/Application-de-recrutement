@@ -631,15 +631,26 @@ img{
 
             </div>
 
-            <a
-                href="{{ route('convocations.create') }}"
-                class="btn-add">
+            <div class="d-flex gap-2 align-items-start">
+                <a href="{{ route('convocations.export.excel', request()->only(['search', 'statut_presence'])) }}" class="btn btn-outline-success">
+                    <i class="bi bi-file-earmark-excel me-1"></i> Excel
+                </a>
+                <a href="{{ route('convocations.export.pdf', request()->only(['search', 'statut_presence'])) }}" class="btn btn-outline-danger">
+                    <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                </a>
 
-                <i class="bi bi-plus-circle"></i>
+                @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+                <a
+                    href="{{ route('convocations.create') }}"
+                    class="btn-add">
 
-                Nouvelle convocation
+                    <i class="bi bi-plus-circle"></i>
 
-            </a>
+                    Nouvelle convocation
+
+                </a>
+                @endif
+            </div>
 
         </div>
 
@@ -808,6 +819,7 @@ img{
 
             </a>
 
+            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
             <a
                 href="{{ route('convocations.edit',$convocation->id_convocation) }}"
                 class="text-edit"
@@ -837,6 +849,7 @@ img{
                 </button>
 
             </form>
+            @endif
 
         </div>
 

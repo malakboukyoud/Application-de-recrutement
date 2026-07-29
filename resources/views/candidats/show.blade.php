@@ -8,10 +8,12 @@
             <span class="text-muted">CIN : {{ $candidat->cin }}</span>
         </div>
         <div>
-            <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-outline-primary">Modifier</a>
-            <a href="{{ route('candidatures.create', ['id_candidat' => $candidat->id_candidat]) }}" class="btn btn-success">
-                + Nouvelle candidature
-            </a>
+            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+                <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-outline-primary">Modifier</a>
+                <a href="{{ route('candidatures.create', ['id_candidat' => $candidat->id_candidat]) }}" class="btn btn-success">
+                    + Nouvelle candidature
+                </a>
+            @endif
         </div>
     </div>
 

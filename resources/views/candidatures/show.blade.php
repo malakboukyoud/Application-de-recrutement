@@ -2,6 +2,11 @@
 @section('title', 'Candidature ' . $candidature->numero_candidature)
 
 @section('content')
+    @php
+        $peutGerer = \App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']);
+        $estCommission = \App\Http\Middleware\RoleMiddleware::userHasRole(['commission']);
+    @endphp
+
     <div class="d-flex justify-content-between align-items-start mb-3">
         <div>
             <h3 class="mb-0">Candidature {{ $candidature->numero_candidature }}</h3>
@@ -12,7 +17,11 @@
         </div>
         <div>
             <span class="badge bg-info text-dark fs-6">{{ $candidature->libelleEtat() }}</span>
-            <a href="{{ route('candidatures.edit', $candidature) }}" class="btn btn-outline-primary">Gérer</a>
+            @if ($peutGerer)
+                <a href="{{ route('candidatures.edit', $candidature) }}" class="btn btn-outline-primary">Gérer</a>
+            @elseif ($estCommission)
+                <a href="{{ route('candidatures.resultats.edit', $candidature) }}" class="btn btn-outline-primary">Saisir résultats</a>
+            @endif
         </div>
     </div>
 
@@ -53,7 +62,8 @@
         </div>
     </div>
 
-    {{-- Changement rapide d'état (présélection / rejet / convocation...) --}}
+    {{-- Changement rapide d'état (présélection / rejet / convocation...) — réservé Admin/RH --}}
+    @if ($peutGerer)
     <div class="card p-3 mt-3">
         <h6 class="text-muted">Changer l'état de la candidature</h6>
         <form method="POST" action="{{ route('candidatures.changer-etat', $candidature) }}" class="row g-2 align-items-end">
@@ -73,6 +83,7 @@
             </div>
         </form>
     </div>
+    @endif
 
     {{-- Pièces jointes --}}
     <div class="card p-3 mt-3">
@@ -94,11 +105,13 @@
                     <td>{{ $doc->date_ajout->format('d/m/Y H:i') }}</td>
                     <td class="text-end">
                         <a href="{{ route('candidatures.documents.download', [$candidature, $doc]) }}" class="btn btn-sm btn-outline-secondary">Télécharger</a>
+                        @if ($peutGerer)
                         <form action="{{ route('candidatures.documents.destroy', [$candidature, $doc]) }}" method="POST" class="d-inline"
                               onsubmit="return confirm('Supprimer ce document ?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-sm btn-outline-danger">Supprimer</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty
@@ -117,6 +130,8 @@
             </div>
         @endif
 
+        {{-- Ajout de pièce jointe : réservé Admin/RH --}}
+        @if ($peutGerer)
         <form method="POST" action="{{ route('candidatures.documents.store', $candidature) }}" enctype="multipart/form-data" class="row g-2 mt-2">
             @csrf
             <div class="col-md-4">
@@ -134,6 +149,7 @@
                 <button class="btn btn-success w-100">Ajouter le document</button>
             </div>
         </form>
+        @endif
     </div>
 
     {{-- Convocations --}}
@@ -145,8 +161,7 @@
             @forelse ($candidature->convocations as $conv)
                 <tr>
                     <td>{{ $conv->type_convocation }}</td>
-                    <td>{{ $conv->date_convocation->format('d/m/Y') }}</td>
-                    <td>{{ $conv->heure_convocation }}</td>
+                    <td>{{ \Carbon\Carbon::parse($conv->date_convocation)->format('d/m/Y') }}</td>                    <td>{{ $conv->heure_convocation }}</td>
                     <td>{{ $conv->lieu_convocation }}</td>
                     <td>{{ $conv->statut_presence }}</td>
                 </tr>
@@ -157,7 +172,7 @@
         </table>
     </div>
 
-    {{-- Évaluations --}}
+    {{-- Évaluations : ajout/modification ouverts à Admin, RH et Commission --}}
     <div class="card p-3 mt-3 mb-4">
         <div class="d-flex justify-content-between align-items-center">
             <h6 class="text-muted mb-0">Notes et évaluations</h6>

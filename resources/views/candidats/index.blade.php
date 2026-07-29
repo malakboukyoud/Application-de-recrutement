@@ -39,7 +39,9 @@
  
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0">Candidats</h3>
-        <a href="{{ route('candidats.create') }}" class="btn btn-success">+ Nouveau candidat</a>
+        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+            <a href="{{ route('candidats.create') }}" class="btn btn-success">+ Nouveau candidat</a>
+        @endif
     </div>
 
     <form method="GET" class="row g-2 mb-3">
@@ -92,12 +94,14 @@
                         <td>{{ $candidat->id_specialite }}</td>
                         <td><span class="badge bg-secondary">{{ $candidat->candidatures_count }}</span></td>
                         <td class="text-end" onclick="event.stopPropagation()">
-                            <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                            <form action="{{ route('candidats.destroy', $candidat) }}" method="POST" class="d-inline"
-                                  onsubmit="return confirm('Supprimer ce candidat ?')">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
-                            </form>
+                            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+                                <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                                <form action="{{ route('candidats.destroy', $candidat) }}" method="POST" class="d-inline"
+                                      onsubmit="return confirm('Supprimer ce candidat ?')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty

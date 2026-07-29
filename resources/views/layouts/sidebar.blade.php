@@ -296,20 +296,22 @@
     </li>
 
 
-    <li>
-        <a href="#">
+    <li class="{{ request()->routeIs('resultats.index') ? 'active' : '' }}">
+        <a href="{{ route('resultats.index') }}">
             <i class="bi bi-trophy-fill"></i>
             <span>Résultats</span>
         </a>
     </li>
 
 
+    @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur']))
     <li class="{{ request()->routeIs('utilisateurs.index') ? 'active' : '' }}">
         <a href="{{ route('utilisateurs.index') }}">
             <i class="bi bi-person-fill"></i>
             <span>Utilisateurs</span>
         </a>
     </li>
+    @endif
 
     <li class="{{ request()->routeIs('historique.index') ? 'active' : '' }}">
         <a href="{{ route('historique.index') }}">

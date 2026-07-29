@@ -563,6 +563,7 @@ text-align:center;
 
                 </a>
 
+                @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
                 <a href="{{ route('offres.edit', $offre->id_offre) }}" class="btn-edit">
 
                     <i class="bi bi-pencil-square"></i>
@@ -588,6 +589,7 @@ text-align:center;
                     </button>
 
                 </form>
+                @endif
 
             </div>
 

@@ -875,6 +875,7 @@ text-align:center;
 
             </div>
 
+            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
             <a href="{{ route('offres.create') }}" class="btn-add">
 
                 <i class="bi bi-plus-circle"></i>
@@ -882,6 +883,7 @@ text-align:center;
                 Ajouter une offre
 
             </a>
+            @endif
 
         </div>
 
@@ -981,6 +983,7 @@ text-align:center;
 
             </a>
 
+            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
             <a
                 href="{{ route('offres.edit',$offre->id_offre) }}"
                 class="text-edit"
@@ -1009,6 +1012,7 @@ text-align:center;
                 </button>
 
             </form>
+            @endif
 
         </div>
 

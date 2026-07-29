@@ -6,8 +6,10 @@ namespace App\Http\Controllers;
 use App\Models\HistoriqueAction;
 use App\Models\ParametreOrganisme;
 use App\Models\Referentiel;
+use App\Models\Utilisateur;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -46,7 +48,48 @@ class ParametreController extends Controller
             'densite' => session('preference_densite', 'normal'),
         ];
 
-        return view('parametres.index', compact('referentiels', 'categories', 'categorie', 'organisme', 'preferences'));
+        $utilisateurConnecte = Utilisateur::find(session('user')->id_utilisateur ?? null);
+
+        return view('parametres.index', compact('referentiels', 'categories', 'categorie', 'organisme', 'preferences', 'utilisateurConnecte'));
+    }
+
+    /**
+     * Chaque utilisateur connecté modifie ses propres informations
+     * (nom, prénom, email, mot de passe) — jamais son profil/rôle.
+     */
+    public function updateProfil(Request $request): RedirectResponse
+    {
+        $moi = Utilisateur::findOrFail(session('user')->id_utilisateur);
+
+        $data = $request->validate([
+            'nom' => ['required', 'string', 'max:100'],
+            'prenom' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'email', 'max:150', Rule::unique('utilisateurs', 'email')->ignore($moi->id_utilisateur, 'id_utilisateur')],
+            'mot_de_passe' => ['nullable', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $moi->nom = $data['nom'];
+        $moi->prenom = $data['prenom'];
+        $moi->email = $data['email'];
+
+        if (! empty($data['mot_de_passe'])) {
+            $moi->mot_de_passe = Hash::make($data['mot_de_passe']);
+        }
+
+        $moi->save();
+
+        // Met à jour la session pour que le nom affiché (topbar, etc.) soit à jour immédiatement.
+        session([
+            'user' => tap(session('user'), function ($sessionUser) use ($moi) {
+                $sessionUser->nom = $moi->nom;
+                $sessionUser->prenom = $moi->prenom;
+                $sessionUser->email = $moi->email;
+            }),
+        ]);
+
+        HistoriqueAction::enregistrer('modification_profil', 'utilisateurs', $moi->id_utilisateur);
+
+        return back()->with('success', 'Vos informations ont été mises à jour.');
     }
 
     /**

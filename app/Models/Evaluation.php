@@ -23,6 +23,7 @@ class Evaluation extends Model
     'coefficient_pratique',
     'appreciation',
     'decision_finale',
+    'classement',
     'saisi_par',
 ];
 

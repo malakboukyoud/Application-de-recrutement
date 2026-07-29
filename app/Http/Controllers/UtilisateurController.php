@@ -247,4 +247,26 @@ class UtilisateurController extends Controller
     }
 
 
+    /**
+     * Activer un compte utilisateur
+     */
+    public function activer($id)
+    {
+        Utilisateur::findOrFail($id)->update(['actif' => 1]);
+
+        return back()->with('success', 'Utilisateur activé');
+    }
+
+
+    /**
+     * Désactiver un compte utilisateur
+     */
+    public function desactiver($id)
+    {
+        Utilisateur::findOrFail($id)->update(['actif' => 0]);
+
+        return back()->with('success', 'Utilisateur désactivé');
+    }
+
+
 }

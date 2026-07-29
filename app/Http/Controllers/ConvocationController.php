@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Convocation;
 use App\Models\Candidature;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ConvocationsExport;
 use Illuminate\Http\Request;
 
 class ConvocationController extends Controller
@@ -12,6 +14,23 @@ class ConvocationController extends Controller
      * Liste des convocations
      */
     public function index(Request $request)
+    {
+        $convocations = $this->convocationsFiltrees($request)
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'convocations.index',
+            compact('convocations')
+        );
+    }
+
+    /**
+     * Requête des convocations avec les mêmes filtres (recherche, statut de
+     * présence) que la page liste — réutilisée par index() et les exports,
+     * pour que les fichiers exportés correspondent à ce qui est affiché.
+     */
+    private function convocationsFiltrees(Request $request)
     {
         $query = Convocation::with([
             'candidature.candidat',
@@ -42,15 +61,7 @@ class ConvocationController extends Controller
 
         }
 
-        $convocations = $query
-            ->orderBy('date_convocation', 'desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return view(
-            'convocations.index',
-            compact('convocations')
-        );
+        return $query->orderBy('date_convocation', 'desc');
     }
 
     /**
@@ -177,5 +188,31 @@ class ConvocationController extends Controller
                 'success',
                 'Convocation supprimée avec succès.'
             );
+    }
+
+    /**
+     * Export Excel de la liste des candidats convoqués (mêmes filtres que la page).
+     */
+    public function exportExcel(Request $request)
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\ConvocationsExport($request->only(['search', 'statut_presence'])),
+            'candidats_convoques.xlsx'
+        );
+    }
+
+    /**
+     * Export PDF de la liste des candidats convoqués (mêmes filtres que la page).
+     */
+    public function exportPdf(Request $request)
+    {
+        $convocations = $this->convocationsFiltrees($request)->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            'convocations.pdf',
+            compact('convocations')
+        );
+
+        return $pdf->download('liste_candidats_convoques.pdf');
     }
 }

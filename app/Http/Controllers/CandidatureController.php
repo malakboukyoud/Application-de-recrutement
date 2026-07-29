@@ -18,6 +18,8 @@ class CandidatureController extends Controller
     /**
      * Liste des candidatures — filtres par offre, état, dossier complet/incomplet,
      * recherche par candidat (§6.6 Présélection / §15 Interfaces attendues).
+     *
+     * Accessible en lecture à Admin, RH et Commission.
      */
     public function index(Request $request): View
     {
@@ -39,6 +41,9 @@ class CandidatureController extends Controller
         return view('candidatures.index', compact('candidatures', 'offres', 'etats', 'filtres'));
     }
 
+    /**
+     * Formulaire de création — réservé Admin/RH (cf. routes/web.php).
+     */
     public function create(Request $request): View
     {
         $candidature = new Candidature([
@@ -66,6 +71,9 @@ class CandidatureController extends Controller
             ->with('success', 'Candidature enregistrée avec succès.');
     }
 
+    /**
+     * Fiche candidature — accessible en lecture à Admin, RH et Commission.
+     */
     public function show(Candidature $candidature): View
     {
         $candidature->load(['candidat', 'offre', 'documents.typeDocument', 'convocations', 'evaluations']);
@@ -79,6 +87,9 @@ class CandidatureController extends Controller
         return view('candidatures.show', compact('candidature', 'piecesManquantes', 'typesDocument'));
     }
 
+    /**
+     * Formulaire d'édition complet — réservé Admin/RH (cf. routes/web.php).
+     */
     public function edit(Candidature $candidature): View
     {
         $candidats = Candidat::orderBy('nom')->get(['id_candidat', 'nom', 'prenom', 'cin']);
@@ -111,6 +122,7 @@ class CandidatureController extends Controller
 
     /**
      * Archivage au lieu de suppression définitive (§11 Sécurité et confidentialité).
+     * Réservé Admin/RH.
      */
     public function destroy(Candidature $candidature): RedirectResponse
     {
@@ -124,6 +136,7 @@ class CandidatureController extends Controller
 
     /**
      * Changement rapide d'état depuis la liste (présélection, rejet, convocation...) — §6.6.
+     * Réservé Admin/RH.
      */
     public function changerEtat(Request $request, Candidature $candidature): RedirectResponse
     {
@@ -146,5 +159,96 @@ class CandidatureController extends Controller
         );
 
         return back()->with('success', 'État de la candidature mis à jour.');
+    }
+
+    /**
+     * Formulaire de saisie des résultats — accessible à Admin, RH et Commission.
+     * Ne permet de modifier QUE classement / décision finale / avis de la commission,
+     * à l'exclusion de tout autre champ de la candidature (candidat, offre, dossier,
+     * état, motif de rejet...) qui reste du ressort exclusif d'Admin/RH.
+     */
+    public function editResultats(Candidature $candidature): View
+    {
+        $candidature->load(['candidat', 'offre']);
+
+        return view('candidatures.resultats', compact('candidature'));
+    }
+
+    public function updateResultats(Request $request, Candidature $candidature): RedirectResponse
+    {
+        $data = $request->validate([
+            'classement' => ['nullable', 'integer', 'min:1'],
+            'decision_finale' => ['nullable', Rule::in(Candidature::DECISIONS)],
+            'observation_commission' => ['nullable', 'string'],
+        ]);
+
+        $candidature->update(['observation_commission' => $data['observation_commission'] ?? null]);
+
+        $resultatData = [
+            'classement' => $data['classement'] ?? null,
+            'decision_finale' => $data['decision_finale'] ?? null,
+        ];
+
+        $evaluation = $candidature->evaluations()->first();
+
+        if ($evaluation) {
+            $evaluation->update($resultatData);
+        } else {
+            $candidature->evaluations()->create($resultatData);
+        }
+
+        HistoriqueAction::enregistrer(
+            'saisie_resultats_commission',
+            'candidatures',
+            $candidature->id_candidature,
+            'Classement / décision finale / avis de la commission mis à jour'
+        );
+
+        return redirect()
+            ->route('candidatures.show', $candidature)
+            ->with('success', 'Résultats enregistrés avec succès.');
+    }
+
+    /**
+     * Page « Résultats » du menu latéral : liste des candidats dont la décision
+     * finale de la commission est « admis », triée par classement.
+     */
+    public function resultatsAdmis(): View
+    {
+        $candidatures = Candidature::with(['candidat', 'offre', 'evaluations'])
+            ->whereHas('evaluations', function ($query) {
+                $query->where('decision_finale', 'admis');
+            })
+            ->get()
+            ->sortBy(fn ($c) => $c->evaluations->first()->classement ?? PHP_INT_MAX)
+            ->values();
+
+        return view('candidatures.resultats_admis', compact('candidatures'));
+    }
+
+    public function exportResultatsExcel()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\ResultatsAdmisExport(),
+            'candidats_admis.xlsx'
+        );
+    }
+
+    public function exportResultatsPdf()
+    {
+        $candidatures = Candidature::with(['candidat', 'offre', 'evaluations'])
+            ->whereHas('evaluations', function ($query) {
+                $query->where('decision_finale', 'admis');
+            })
+            ->get()
+            ->sortBy(fn ($c) => $c->evaluations->first()->classement ?? PHP_INT_MAX)
+            ->values();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            'candidatures.resultats_pdf',
+            compact('candidatures')
+        );
+
+        return $pdf->download('liste_candidats_admis.pdf');
     }
 }

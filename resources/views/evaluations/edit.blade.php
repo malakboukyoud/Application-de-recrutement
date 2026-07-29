@@ -16,9 +16,11 @@
         </form>
     </div>
 
+    @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
     <form method="POST" action="{{ route('evaluations.destroy', $evaluation) }}" class="mt-2"
           onsubmit="return confirm('Supprimer cette évaluation ?')">
         @csrf @method('DELETE')
         <button class="btn btn-outline-danger btn-sm">Supprimer cette évaluation</button>
     </form>
+    @endif
 @endsection

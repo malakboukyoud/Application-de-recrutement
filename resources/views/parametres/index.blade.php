@@ -17,7 +17,13 @@
 
     <ul class="nav nav-tabs mb-4" id="parametresTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="tab-referentiels" data-bs-toggle="tab" data-bs-target="#referentiels" type="button">
+            <button class="nav-link active" id="tab-profil" data-bs-toggle="tab" data-bs-target="#profil" type="button">
+                <i class="bi bi-person-circle me-1"></i> Mon profil
+            </button>
+        </li>
+        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-referentiels" data-bs-toggle="tab" data-bs-target="#referentiels" type="button">
                 <i class="bi bi-list-check me-1"></i> Référentiels
             </button>
         </li>
@@ -26,11 +32,14 @@
                 <i class="bi bi-building me-1"></i> Organisme
             </button>
         </li>
+        @endif
+        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur']))
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="tab-utilisateurs" data-bs-toggle="tab" data-bs-target="#utilisateurs" type="button">
-                <i class="bi bi-person-gear me-1"></i> Utilisateurs
+                <i class="bi bi-person-gear me-1"></i> Comptes utilisateurs
             </button>
         </li>
+        @endif
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="tab-affichage" data-bs-toggle="tab" data-bs-target="#affichage" type="button">
                 <i class="bi bi-sliders me-1"></i> Affichage
@@ -40,8 +49,43 @@
 
     <div class="tab-content">
 
+        {{-- ============ MON PROFIL ============ --}}
+        <div class="tab-pane fade show active" id="profil">
+            <div class="card p-4" style="max-width:600px;">
+                <h6 class="text-muted mb-3">Mes informations personnelles</h6>
+                <form method="POST" action="{{ route('parametres.profil.update') }}" class="row g-3">
+                    @csrf @method('PUT')
+                    <div class="col-md-6">
+                        <label class="form-label">Nom *</label>
+                        <input type="text" name="nom" value="{{ old('nom', $utilisateurConnecte->nom ?? '') }}" class="form-control" required maxlength="100">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Prénom *</label>
+                        <input type="text" name="prenom" value="{{ old('prenom', $utilisateurConnecte->prenom ?? '') }}" class="form-control" required maxlength="100">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" value="{{ old('email', $utilisateurConnecte->email ?? '') }}" class="form-control" required maxlength="150">
+                    </div>
+                    <div class="col-12"><hr><h6 class="text-muted">Changer le mot de passe (optionnel)</h6></div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nouveau mot de passe</label>
+                        <input type="password" name="mot_de_passe" class="form-control" minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirmer le mot de passe</label>
+                        <input type="password" name="mot_de_passe_confirmation" class="form-control" minlength="6" autocomplete="new-password">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <button class="btn btn-success">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
         {{-- ============ RÉFÉRENTIELS ============ --}}
-        <div class="tab-pane fade show active" id="referentiels">
+        <div class="tab-pane fade" id="referentiels">
             <div class="card p-4">
                 <form method="GET" action="{{ route('parametres.index') }}" class="row g-2 mb-3">
                     <div class="col-md-4">
@@ -132,17 +176,20 @@
                 </form>
             </div>
         </div>
+        @endif
 
-        {{-- ============ UTILISATEURS ============ --}}
+        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur']))
+        {{-- ============ UTILISATEURS (Admin uniquement) ============ --}}
         <div class="tab-pane fade" id="utilisateurs">
             <div class="card p-4">
                 <h6 class="text-muted mb-2">Gestion des comptes utilisateurs</h6>
-                <p class="text-muted">Créez, modifiez ou désactivez les comptes du personnel RH ayant accès à l'application.</p>
+                <p class="text-muted">Créez, modifiez, activez/désactivez ou supprimez les comptes ayant accès à l'application.</p>
                 <a href="{{ route('utilisateurs.index') }}" class="btn btn-outline-primary">
                     <i class="bi bi-person-gear me-1"></i> Gérer les utilisateurs
                 </a>
             </div>
         </div>
+        @endif
 
         {{-- ============ AFFICHAGE ============ --}}
         <div class="tab-pane fade" id="affichage">

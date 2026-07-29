@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Candidature extends Model
@@ -30,8 +31,8 @@ class Candidature extends Model
 
     protected $fillable = [
         'numero_candidature', 'id_candidat', 'id_offre', 'date_depot', 'mode_depot',
-        'etat_candidature', 'dossier_complet', 'motif_rejet', 'classement',
-        'decision_finale', 'observation_rh', 'observation_commission',
+        'etat_candidature', 'dossier_complet', 'motif_rejet',
+        'observation_rh', 'observation_commission',
     ];
 
     protected $casts = [
@@ -67,16 +68,23 @@ class Candidature extends Model
     {
         return $this->hasMany(Convocation::class, 'id_candidature', 'id_candidature');
     }
+    public function evaluations(): HasMany
+{
+    return $this->hasMany(Evaluation::class, 'id_candidature', 'id_candidature');
+}
 
-    public function evaluations()
+    // classement et decision_finale sont désormais stockés sur l'évaluation ;
+    // ces accesseurs conservent la compatibilité avec les vues existantes.
+    public function getClassementAttribute()
     {
-        return $this->hasMany(Evaluation::class, 'id_candidature', 'id_candidature');
+        return $this->evaluations->first()->classement ?? null;
     }
 
-    /**
-     * Pièces exigées par l'offre vs pièces déjà déposées -> permet d'afficher
-     * les documents manquants (§6.4 / §10 du cahier des charges).
-     */
+    public function getDecisionFinaleAttribute()
+    {
+        return $this->evaluations->first()->decision_finale ?? null;
+    }
+
     public function piecesManquantes(): array
     {
         $exigees = collect(explode(',', (string) optional($this->offre)->pieces_exigees))
