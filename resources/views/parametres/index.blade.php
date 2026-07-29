@@ -27,11 +27,7 @@
                 <i class="bi bi-list-check me-1"></i> Référentiels
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-organisme" data-bs-toggle="tab" data-bs-target="#organisme" type="button">
-                <i class="bi bi-building me-1"></i> Organisme
-            </button>
-        </li>
+        
         @endif
         @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur']))
         <li class="nav-item" role="presentation">
@@ -145,39 +141,7 @@
             </div>
         </div>
 
-        {{-- ============ ORGANISME ============ --}}
-        <div class="tab-pane fade" id="organisme">
-            <div class="card p-4">
-                <form method="POST" action="{{ route('parametres.organisme.update') }}" class="row g-3">
-                    @csrf @method('PUT')
-                    <div class="col-md-8">
-                        <label class="form-label">Nom de l'organisme</label>
-                        <input type="text" name="nom_organisme" value="{{ old('nom_organisme', $organisme->nom_organisme) }}" class="form-control" maxlength="150">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Sigle</label>
-                        <input type="text" name="sigle" value="{{ old('sigle', $organisme->sigle) }}" class="form-control" maxlength="20">
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-label">Adresse</label>
-                        <input type="text" name="adresse" value="{{ old('adresse', $organisme->adresse) }}" class="form-control" maxlength="255">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Téléphone</label>
-                        <input type="text" name="telephone" value="{{ old('telephone', $organisme->telephone) }}" class="form-control" maxlength="30">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" value="{{ old('email', $organisme->email) }}" class="form-control" maxlength="150">
-                    </div>
-                    <div class="col-12 mt-4">
-                        <button class="btn btn-success">Enregistrer</button>
-                    </div>
-                </form>
-            </div>
-        </div>
         @endif
-
         @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur']))
         {{-- ============ UTILISATEURS (Admin uniquement) ============ --}}
         <div class="tab-pane fade" id="utilisateurs">

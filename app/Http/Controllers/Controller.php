@@ -2,25 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\RoleMiddleware;
-
 abstract class Controller
 {
-
-    
     protected function currentUserId(): ?int
     {
         return session('user')->id_utilisateur ?? null;
     }
 
     /**
-     * Vrai si l'utilisateur connecté a le profil Admin ou RH.
-     * Utile pour masquer les boutons "Modifier"/"Supprimer" dans les vues Blade
-     * ou pour conditionner de la logique métier dans un contrôleur.
+     * Libellé du profil de l'utilisateur connecté (ex : 'Administrateur').
      */
-    protected function isAdminOuRh(): bool
+    protected function currentProfil(): string
     {
-        return RoleMiddleware::userHasRole(['administrateur', 'rh']);
+        return session('user')->profil ?? '';
     }
 
+    /**
+     * Vrai si le profil connecté fait partie de la liste donnée.
+     * L'Administrateur est toujours autorisé.
+     * Utile pour des vérifications fines à l'intérieur d'une méthode de
+     * contrôleur (ex : masquer certains champs), en complément du middleware
+     * `profil:...` posé sur la route.
+     */
+    protected function profilAutorise(array $profilsAutorises): bool
+    {
+        $profil = strtolower(trim($this->currentProfil()));
+
+        if ($profil === 'administrateur') {
+            return true;
+        }
+
+        return in_array($profil, array_map('strtolower', $profilsAutorises), true);
+    }
 }

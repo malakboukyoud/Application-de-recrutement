@@ -15,23 +15,6 @@ class ConvocationController extends Controller
      */
     public function index(Request $request)
     {
-        $convocations = $this->convocationsFiltrees($request)
-            ->paginate(10)
-            ->withQueryString();
-
-        return view(
-            'convocations.index',
-            compact('convocations')
-        );
-    }
-
-    /**
-     * Requête des convocations avec les mêmes filtres (recherche, statut de
-     * présence) que la page liste — réutilisée par index() et les exports,
-     * pour que les fichiers exportés correspondent à ce qui est affiché.
-     */
-    private function convocationsFiltrees(Request $request)
-    {
         $query = Convocation::with([
             'candidature.candidat',
             'candidature.offre'
@@ -61,7 +44,15 @@ class ConvocationController extends Controller
 
         }
 
-        return $query->orderBy('date_convocation', 'desc');
+        $convocations = $query
+            ->orderBy('date_convocation', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view(
+            'convocations.index',
+            compact('convocations')
+        );
     }
 
     /**
@@ -206,7 +197,34 @@ class ConvocationController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        $convocations = $this->convocationsFiltrees($request)->get();
+        $query = Convocation::with([
+            'candidature.candidat',
+            'candidature.offre'
+        ]);
+
+        if ($request->filled('search')) {
+
+            $search = $request->search;
+
+            $query->whereHas('candidature.candidat', function ($q) use ($search) {
+
+                $q->where('nom', 'like', "%{$search}%")
+                  ->orWhere('prenom', 'like', "%{$search}%");
+
+            });
+
+        }
+
+        if ($request->filled('statut_presence')) {
+
+            $query->where(
+                'statut_presence',
+                $request->statut_presence
+            );
+
+        }
+
+        $convocations = $query->orderBy('date_convocation', 'desc')->get();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
             'convocations.pdf',

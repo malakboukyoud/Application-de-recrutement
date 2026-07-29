@@ -20,6 +20,13 @@
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
     font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
     background:#eef2ee;

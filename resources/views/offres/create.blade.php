@@ -35,6 +35,13 @@
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
     background:var(--light);
     font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
@@ -51,7 +58,7 @@ body{
 =========================== */
 
 .content{
-    padding-top:700px;
+    padding-top:95px;
     max-width:1200px;
 
     margin:auto;

@@ -39,9 +39,7 @@
  
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0">Candidats</h3>
-        @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
-            <a href="{{ route('candidats.create') }}" class="btn btn-success">+ Nouveau candidat</a>
-        @endif
+        <a href="{{ route('candidats.create') }}" class="btn btn-success">+ Nouveau candidat</a>
     </div>
 
     <form method="GET" class="row g-2 mb-3">
@@ -58,10 +56,10 @@
             </select>
         </div>
         <div class="col-md-3">
-            <select name="diplome" class="form-select">
+            <select name="id_diplome" class="form-select">
                 <option value="">Tous les diplômes</option>
                 @foreach ($diplomes as $diplome)
-                    <option value="{{ $diplome }}" @selected(request('diplome') == $diplome)>{{ $diplome }}</option>
+                    <option value="{{ $diplome->id_ref }}" @selected(request('id_diplome') == $diplome->id_ref)>{{ $diplome->libelle }}</option>
                 @endforeach
             </select>
         </div>
@@ -90,18 +88,16 @@
                         <td>{{ $candidat->cin }}</td>
                         <td>{{ $candidat->nom_complet }}</td>
                         <td>{{ $candidat->ville }}</td>
-                        <td>{{ $candidat->id_diplome }}</td>
-                        <td>{{ $candidat->id_specialite }}</td>
+                        <td>{{ optional($candidat->diplome)->libelle ?? '-' }}</td>
+                        <td>{{ optional($candidat->specialite)->libelle ?? '-' }}</td>
                         <td><span class="badge bg-secondary">{{ $candidat->candidatures_count }}</span></td>
                         <td class="text-end" onclick="event.stopPropagation()">
-                            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
-                                <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                                <form action="{{ route('candidats.destroy', $candidat) }}" method="POST" class="d-inline"
-                                      onsubmit="return confirm('Supprimer ce candidat ?')">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger">Supprimer</button>
-                                </form>
-                            @endif
+                            <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                            <form action="{{ route('candidats.destroy', $candidat) }}" method="POST" class="d-inline"
+                                  onsubmit="return confirm('Supprimer ce candidat ?')">
+                                @csrf @method('DELETE')
+                                <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 @empty

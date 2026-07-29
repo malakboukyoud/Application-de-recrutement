@@ -33,7 +33,7 @@
             <select name="id_diplome" class="form-select">
                 <option value="">Tous les diplômes</option>
                 @foreach ($diplomes as $diplome)
-                    <option value="{{ $diplome }}" @selected($filtres['id_diplome'] == $diplome)>{{ $diplome }}</option>
+                    <option value="{{ $diplome->id_ref }}" @selected($filtres['id_diplome'] == $diplome->id_ref)>{{ $diplome->libelle }}</option>
                 @endforeach
             </select>
         </div>
@@ -84,7 +84,7 @@
                                 {{ $doc->candidature->offre->intitule_poste }}
                             </a>
                         </td>
-                        <td>{{ $doc->candidature->candidat->id_diplome }}</td>
+                        <td>{{ optional($doc->candidature->candidat->diplome)->libelle ?? '-' }}</td>
                         <td>{{ $doc->typeDocument->libelle ?? '—' }}</td>
                         <td>{{ $doc->nom_fichier }}</td>
                         <td>{{ optional($doc->date_ajout)->format('d/m/Y H:i') }}</td>

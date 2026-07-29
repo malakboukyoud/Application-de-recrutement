@@ -16,11 +16,8 @@ class RoleMiddleware
             return redirect('/login');
         }
 
-        if (! self::userHasRole($roles)) {
-            // Au lieu d'un abort(403) (page d'erreur), on reste sur la page précédente
-            // avec un message flash. Nécessite que le layout affiche session('error')
-            // (ex : @if (session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif).
-            return back()->with('error', "Accès interdit : vous n'avez pas les droits nécessaires pour effectuer cette action.");
+        if (!in_array($user->profil, $roles)) {
+            abort(403, 'Accès interdit.');
         }
 
         return $next($request);
@@ -57,16 +54,6 @@ class RoleMiddleware
     /**
      * Normalise pour comparer sans se soucier des accents/majuscules
      * (ex: "Administrateur", "ADMIN", "admin" -> mêmes valeurs comparables).
-     *
-     * Valeurs réelles en base (table `referentiels`, type_ref = 'PROFIL') :
-     *   id_ref 1 -> "Administrateur"        -> normalisé "administrateur"
-     *   id_ref 2 -> "RH"                     -> normalisé "rh"
-     *   id_ref 3 -> "Commission"             -> normalisé "commission"
-     *   id_ref 4 -> "Consultation"           -> normalisé "consultation"
-     *   id_ref 5 -> "Responsable de service" -> normalisé "responsable de service"
-     *
-     * Utilisez ces valeurs normalisées dans les middlewares de routes, ex :
-     *   Route::middleware('role:administrateur,rh')->group(...)
      */
     private static function normaliser(string $valeur): string
     {

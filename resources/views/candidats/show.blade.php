@@ -8,12 +8,10 @@
             <span class="text-muted">CIN : {{ $candidat->cin }}</span>
         </div>
         <div>
-            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
-                <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-outline-primary">Modifier</a>
-                <a href="{{ route('candidatures.create', ['id_candidat' => $candidat->id_candidat]) }}" class="btn btn-success">
-                    + Nouvelle candidature
-                </a>
-            @endif
+            <a href="{{ route('candidats.edit', $candidat) }}" class="btn btn-outline-primary">Modifier</a>
+            <a href="{{ route('candidatures.create', ['id_candidat' => $candidat->id_candidat]) }}" class="btn btn-success">
+                + Nouvelle candidature
+            </a>
         </div>
     </div>
 
@@ -37,8 +35,8 @@
                 <h6 class="text-muted">Formation &amp; expérience</h6>
                 <table class="table table-sm mb-0">
                     <tr><th style="width:40%">Niveau d'étude</th><td>{{ $candidat->niveau_etude }}</td></tr>
-                    <tr><th>Diplôme</th><td>{{ $candidat->id_diplome }}</td></tr>
-                    <tr><th>Spécialité</th><td>{{ $candidat->id_specialite }}</td></tr>
+                    <tr><th>Diplôme</th><td>{{ optional($candidat->diplome)->libelle ?? '-' }}</td></tr>
+                    <tr><th>Spécialité</th><td>{{ optional($candidat->specialite)->libelle ?? '-' }}</td></tr>
                     <tr><th>Établissement</th><td>{{ $candidat->etablissement }}</td></tr>
                     <tr><th>Année d'obtention</th><td>{{ $candidat->annee_obtention }}</td></tr>
                     <tr><th>Expérience</th><td>{{ $candidat->experience }}</td></tr>

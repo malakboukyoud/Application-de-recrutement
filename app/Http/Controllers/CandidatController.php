@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CandidatRequest;
 use App\Models\Candidat;
 use App\Models\HistoriqueAction;
+use App\Models\Referentiel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,6 +18,7 @@ class CandidatController extends Controller
     public function index(Request $request): View
     {
         $candidats = Candidat::query()
+            ->with(['diplome', 'specialite'])
             ->recherche($request->query('q'))
             ->when($request->query('ville'), fn ($q, $v) => $q->where('ville', $v))
             ->when($request->query('id_diplome'), fn ($q, $v) => $q->where('id_diplome', $v))
@@ -26,14 +28,17 @@ class CandidatController extends Controller
             ->withQueryString();
 
         $villes = Candidat::query()->distinct()->orderBy('ville')->pluck('ville')->filter();
-        $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->where('actif', true)->orderBy('libelle')->get();
 
         return view('candidats.index', compact('candidats', 'villes', 'diplomes'));
     }
 
     public function create(): View
     {
-        return view('candidats.create', ['candidat' => new Candidat()]);
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->where('actif', true)->orderBy('libelle')->get();
+        $specialites = Referentiel::where('type_ref', 'SPECIALITE')->where('actif', true)->orderBy('libelle')->get();
+
+        return view('candidats.create', ['candidat' => new Candidat(), 'diplomes' => $diplomes, 'specialites' => $specialites]);
     }
 
     public function store(CandidatRequest $request): RedirectResponse
@@ -49,14 +54,17 @@ class CandidatController extends Controller
 
     public function show(Candidat $candidat): View
     {
-        $candidat->load(['candidatures.offre']);
+        $candidat->load(['candidatures.offre', 'diplome', 'specialite']);
 
         return view('candidats.show', compact('candidat'));
     }
 
     public function edit(Candidat $candidat): View
     {
-        return view('candidats.edit', compact('candidat'));
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->where('actif', true)->orderBy('libelle')->get();
+        $specialites = Referentiel::where('type_ref', 'SPECIALITE')->where('actif', true)->orderBy('libelle')->get();
+
+        return view('candidats.edit', compact('candidat', 'diplomes', 'specialites'));
     }
 
     public function update(CandidatRequest $request, Candidat $candidat): RedirectResponse

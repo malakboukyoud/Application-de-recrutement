@@ -59,11 +59,21 @@
     </div>
     <div class="col-md-3">
         <label class="form-label">Diplôme principal</label>
-        <input type="text" name="id_diplome" value="{{ $old('id_diplome') }}" class="form-control">
+        <select name="id_diplome" class="form-select">
+            <option value="">—</option>
+            @foreach ($diplomes as $diplome)
+                <option value="{{ $diplome->id_ref }}" @selected($old('id_diplome') == $diplome->id_ref)>{{ $diplome->libelle }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-3">
         <label class="form-label">Spécialité</label>
-        <input type="text" name="id_specialite" value="{{ $old('id_specialite') }}" class="form-control">
+        <select name="id_specialite" class="form-select">
+            <option value="">—</option>
+            @foreach ($specialites as $specialite)
+                <option value="{{ $specialite->id_ref }}" @selected($old('id_specialite') == $specialite->id_ref)>{{ $specialite->libelle }}</option>
+            @endforeach
+        </select>
     </div>
     <div class="col-md-3">
         <label class="form-label">Année d'obtention</label>

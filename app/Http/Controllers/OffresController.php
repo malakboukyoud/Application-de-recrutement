@@ -56,9 +56,9 @@ class OffresController extends Controller
      */
     public function create()
     {
-        $diplomes = Referentiel::where('type_ref', 'Diplôme')->get();
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->get();
 
-        $specialites = Referentiel::where('type_ref', 'Spécialité')->get();
+        $specialites = Referentiel::where('type_ref', 'SPECIALITE')->get();
 
         return view('offres.create', compact('diplomes', 'specialites'));
     }
@@ -110,9 +110,9 @@ class OffresController extends Controller
 {
     $offre = Offre::findOrFail($id);
 
-    $diplomes = Referentiel::where('type_ref', 'Diplôme')->get();
+    $diplomes = Referentiel::where('type_ref', 'DIPLOME')->get();
 
-    $specialites = Referentiel::where('type_ref', 'Spécialité')->get();
+    $specialites = Referentiel::where('type_ref', 'SPECIALITE')->get();
 
     return view('offres.edit', compact(
         'offre',

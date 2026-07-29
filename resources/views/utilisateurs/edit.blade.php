@@ -38,6 +38,13 @@ box-sizing:border-box;
 
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 
 body{
 
@@ -62,6 +69,7 @@ max-width:1100px;
 margin:40px auto;
 
 padding:20px;
+padding-top:95px;
 
 }
 

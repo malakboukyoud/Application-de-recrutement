@@ -35,6 +35,13 @@
 
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
 
     background:var(--light);
@@ -355,7 +362,15 @@ text-align:center;
 </head>
 
 <body>
+@php
+    $profil = session('user')->profil ?? '';
 
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
 <div class="container-page">
 
 <!-- ==========================
@@ -612,8 +627,7 @@ Informations générales
         Retour à la liste
 
     </a>
-
-    @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+     @if($admin || $serviceRH)
     <a href="{{ route('convocations.edit',$convocation->id_convocation) }}"
        class="btn-edit">
 
@@ -622,7 +636,8 @@ Informations générales
         Modifier
 
     </a>
-
+    @endif
+@if($admin || $serviceRH)
     <form action="{{ route('convocations.destroy',$convocation->id_convocation) }}"
           method="POST"
           onsubmit="return confirm('Voulez-vous vraiment supprimer cette convocation ?');">
@@ -641,8 +656,7 @@ Informations générales
         </button>
 
     </form>
-    @endif
-
+@endif
 </div>
 
 </div>

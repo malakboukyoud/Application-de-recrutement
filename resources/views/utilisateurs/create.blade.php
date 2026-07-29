@@ -51,6 +51,13 @@
 
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 
 
 body{
@@ -91,6 +98,7 @@ body{
     margin:auto;
 
     padding:40px;
+    padding-top:95px;
 
 
 }

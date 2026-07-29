@@ -4,11 +4,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EvaluationRequest;
-use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\Evaluation;
 use App\Models\HistoriqueAction;
 use App\Models\OffreRecrutement;
+use App\Models\Referentiel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -37,7 +37,7 @@ class EvaluationController extends Controller
         $filtres['direction'] = $direction;
 
         $evaluations = Evaluation::query()
-            ->with(['candidature.candidat', 'candidature.offre'])
+            ->with(['candidature.candidat.diplome', 'candidature.offre'])
             ->whereHas('candidature', function ($q) use ($filtres) {
                 $q->when($filtres['id_offre'], fn ($qq, $v) => $qq->where('id_offre', $v));
 
@@ -58,7 +58,7 @@ class EvaluationController extends Controller
             ->withQueryString();
 
         $offres = OffreRecrutement::orderBy('intitule_poste')->get(['id_offre', 'reference_offre', 'intitule_poste']);
-        $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->where('actif', true)->orderBy('libelle')->get();
 
         return view('evaluations.index', compact('evaluations', 'offres', 'diplomes', 'filtres'));
     }

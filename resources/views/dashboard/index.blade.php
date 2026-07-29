@@ -1,18 +1,30 @@
 @extends('layouts.app')
 @php
     $profil = session('user')->profil ?? '';
+    $profilNormalise = strtolower(trim($profil));
 @endphp
+
+{{--
+    Profils officiels (référentiel PROFIL) : Administrateur, RH,
+    Commission, Responsable de service, Consultation.
+    L'Administrateur a toujours accès à tout, quel que soit le menu affiché.
+
+    Comparaison normalisée (insensible à la casse/espaces), comme dans
+    App\Http\Middleware\CheckProfil::normaliser() : le libellé du profil
+    est saisi en texte libre depuis la page Paramètres, donc une simple
+    comparaison "==" pouvait échouer sur une casse différente et masquer
+    les actions rapides pour tous les profils sauf ceux tapés à l'identique.
+--}}
 @php
+$admin = $profilNormalise === 'administrateur';
 
-$admin = $profil == 'Administrateur';
+$serviceRH = $profilNormalise === 'rh';
 
-$responsableRH = $profil == 'Responsable RH';
+$commission = $profilNormalise === 'commission';
 
-$responsableService = $profil == 'Responsable de service';
+$responsableService = $profilNormalise === 'responsable de service';
 
-$agentRH = $profil == 'Agent RH';
-
-$consultation = $profil == 'Consultation';
+$consultation = $profilNormalise === 'consultation';
 
 @endphp
 @section('title', 'Tableau de bord | ORMVASM')
@@ -67,6 +79,13 @@ $consultation = $profil == 'Consultation';
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 html{
     scroll-behavior:smooth;
 }
@@ -112,7 +131,7 @@ select{
     left:0;
     right:0;
 
-    height:88px;
+    height:75px;
 
     background:#fff;
 
@@ -151,8 +170,8 @@ select{
 
 .ormvasm-brand img{
 
-    width:140px;
-    height:140px;
+    width:100px;
+    height:100px;
 
     object-fit:contain;
 
@@ -852,9 +871,11 @@ select{
 
 .ormvasm-main{
 
-    margin-left:70px;
-    margin-right:70px;
-    padding-top:50px;
+    /* Le decalage a gauche est deja gere par la vraie sidebar (.content, layouts/app.blade.php) :
+       on ne le duplique plus ici pour eviter le double espacement a gauche. */
+    margin-left:0;
+    margin-right:0;
+    padding-top:70px;
 
     min-height:100vh;
 
@@ -1963,7 +1984,7 @@ select{
     }
 
     .ormvasm-main{
-        margin-left:240px;
+        margin-left:0;
     }
 
     .ormvasm-content{
@@ -2032,7 +2053,7 @@ select{
     }
 
     .ormvasm-main{
-        margin-left:78px;
+        margin-left:0;
     }
 
 }
@@ -2051,7 +2072,7 @@ select{
 
     .ormvasm-main{
         padding-top:72px;
-        margin-left:65px;
+        margin-left:0;
     }
 
     .ormvasm-content{
@@ -2132,7 +2153,7 @@ select{
     <div class="ormvasm-brand">
 
         <img
-            src="{{ asset('image/ormva.png') }}"
+            src="{{ asset('image/ormvaa.png') }}"
             alt="ORMVASM"
         >
 
@@ -2160,34 +2181,6 @@ select{
             >
 
         </div>
-
-
-        <select
-            class="ormvasm-filter"
-            id="dashboardFilter"
-        >
-
-            <option value="all">
-                Toutes les statistiques
-            </option>
-
-            <option value="offres">
-                Offres
-            </option>
-
-            <option value="candidatures">
-                Candidatures
-            </option>
-
-            <option value="candidats">
-                Candidats
-            </option>
-
-            <option value="dossiers">
-                Dossiers
-            </option>
-
-        </select>
 
     </div>
 
@@ -3849,6 +3842,7 @@ select{
      7. ACTIONS RAPIDES
 ========================================================= --}}
 
+@if($admin || $serviceRH)
 <section class="ormvasm-section">
 
     <div class="ormvasm-card">
@@ -3878,7 +3872,7 @@ select{
         <div class="ormvasm-quick-actions">
 
 
-            @if($admin || $responsableRH)
+            @if($admin || $serviceRH)
 
         <a href="{{ url('/offres/create') }}"
         class="ormvasm-quick-action orange">
@@ -3934,7 +3928,24 @@ select{
             </a>
 
 
-            @if($profil == 'Administrateur')
+            @if($admin || $commission)
+
+<a
+    href="{{ url('/evaluations') }}"
+    class="ormvasm-quick-action green"
+>
+
+    <i class="bi bi-clipboard-check"></i>
+
+    <span>
+        Évaluations
+    </span>
+
+</a>
+
+@endif
+
+            @if($admin)
 
 <a
     href="{{ url('/utilisateurs') }}"
@@ -3950,18 +3961,6 @@ select{
 </a>
 
 @endif
-          <a
-                href="{{ route('dashboard.export.excel') }}"
-                class="ormvasm-quick-action green"
-            >
-
-                <i class="bi bi-file-earmark-excel-fill"></i>
-
-                <span>
-                    Export Excel
-                </span>
-
-            </a>
             
 
         </div>
@@ -3969,6 +3968,9 @@ select{
     </div>
 
 </section>
+@endif
+
+@if($admin || $serviceRH)
 <section class="ormvasm-section">
 
     <div class="ormvasm-card">
@@ -3981,6 +3983,7 @@ select{
                     Exporter les rapports
                 </div>
 
+
                 <div class="ormvasm-card-subtitle">
                     Télécharger la liste des offres et des candidatures.
                 </div>
@@ -3991,7 +3994,7 @@ select{
 
         <div class="ormvasm-quick-actions">
 
-            @if($admin || $responsableRH || $responsableService)
+            @if($admin || $serviceRH || $responsableService)
 
             <a href="{{ route('dashboard.export.excel') }}"
             class="ormvasm-quick-action green">
@@ -4006,8 +4009,8 @@ select{
 
             @endif
 
-            @if($admin || $responsableRH || $responsableService)
-
+           
+            @if($admin || $serviceRH || $responsableService)
             <a href="{{ route('dashboard.export.pdf') }}"
             class="ormvasm-quick-action red">
 
@@ -4026,6 +4029,7 @@ select{
     </div>
 
 </section>
+@endif
 
 
 

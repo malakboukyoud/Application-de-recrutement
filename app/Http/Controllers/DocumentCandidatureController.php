@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Candidat;
 use App\Models\Candidature;
 use App\Models\DocumentCandidature;
 use App\Models\HistoriqueAction;
@@ -37,7 +36,7 @@ class DocumentCandidatureController extends Controller
         $filtres['direction'] = $direction;
 
         $documents = DocumentCandidature::query()
-            ->with(['candidature.candidat', 'candidature.offre', 'typeDocument'])
+            ->with(['candidature.candidat.diplome', 'candidature.offre', 'typeDocument'])
             ->whereHas('candidature', function ($q) use ($filtres) {
                 $q->when($filtres['id_offre'], fn ($qq, $v) => $qq->where('id_offre', $v));
 
@@ -59,7 +58,7 @@ class DocumentCandidatureController extends Controller
             ->withQueryString();
 
         $offres = OffreRecrutement::orderBy('intitule_poste')->get(['id_offre', 'reference_offre', 'intitule_poste']);
-        $diplomes = Candidat::query()->distinct()->orderBy('id_diplome')->pluck('id_diplome')->filter();
+        $diplomes = Referentiel::where('type_ref', 'DIPLOME')->where('actif', true)->orderBy('libelle')->get();
         $typesDocument = Referentiel::where('type_ref', 'TYPE_DOCUMENT')
             ->where('actif', 1)
             ->orderBy('libelle')

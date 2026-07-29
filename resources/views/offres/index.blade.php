@@ -40,6 +40,13 @@
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
 
     font-family:"Segoe UI",sans-serif;
@@ -764,10 +771,52 @@ text-align:center;
     width:calc(100% - 260px);
 
 }
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Toutes les icônes */
+.action a,
+.action button {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 8px;
+
+    font-size: 18px;
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
 
 
 </style>
 <body>
+@php
+    $profil = session('user')->profil ?? '';
+
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
  <div>
     @include('layouts.sidebar')
         </div>
@@ -874,8 +923,7 @@ text-align:center;
                 </p>
 
             </div>
-
-            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+            @if($admin || $serviceRH)
             <a href="{{ route('offres.create') }}" class="btn-add">
 
                 <i class="bi bi-plus-circle"></i>
@@ -883,8 +931,7 @@ text-align:center;
                 Ajouter une offre
 
             </a>
-            @endif
-
+             @endif
         </div>
 
         @if(session('success'))
@@ -982,8 +1029,7 @@ text-align:center;
                 <i class="bi bi-eye-fill"></i>
 
             </a>
-
-            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+            @if($admin || $serviceRH)
             <a
                 href="{{ route('offres.edit',$offre->id_offre) }}"
                 class="text-edit"
@@ -992,7 +1038,8 @@ text-align:center;
                 <i class="bi bi-pencil-square"></i>
 
             </a>
-
+            @endif
+            @if($admin)
             <form
                 action="{{ route('offres.destroy',$offre->id_offre) }}"
                 method="POST"
@@ -1012,8 +1059,7 @@ text-align:center;
                 </button>
 
             </form>
-            @endif
-
+@endif
         </div>
 
     </td>

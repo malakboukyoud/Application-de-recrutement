@@ -20,4 +20,3 @@ class Referentiel extends Model
         return $query->where('type_ref', $type)->where('actif', true);
     }
 }
-

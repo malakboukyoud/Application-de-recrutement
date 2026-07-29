@@ -33,28 +33,28 @@ class TestDataSeeder extends Seeder
         // Référentiels (diplômes / spécialités)
         // ------------------------------------------------------------
         $diplomeIngenieur = Referentiel::firstOrCreate(
-            ['type_ref' => 'diplome', 'libelle' => "Diplôme d'ingénieur d'État"],
+            ['type_ref' => 'DIPLOME', 'libelle' => "Diplôme d'ingénieur d'État"],
             ['actif' => true]
         );
         $diplomeTechnicien = Referentiel::firstOrCreate(
-            ['type_ref' => 'diplome', 'libelle' => 'Diplôme de technicien spécialisé'],
+            ['type_ref' => 'DIPLOME', 'libelle' => 'Diplôme de technicien spécialisé'],
             ['actif' => true]
         );
         $diplomeLicence = Referentiel::firstOrCreate(
-            ['type_ref' => 'diplome', 'libelle' => 'Licence'],
+            ['type_ref' => 'DIPLOME', 'libelle' => 'Licence'],
             ['actif' => true]
         );
 
         $specAgronomie = Referentiel::firstOrCreate(
-            ['type_ref' => 'specialite', 'libelle' => 'Génie rural / Agronomie'],
+            ['type_ref' => 'SPECIALITE', 'libelle' => 'Génie rural / Agronomie'],
             ['actif' => true]
         );
         $specInformatique = Referentiel::firstOrCreate(
-            ['type_ref' => 'specialite', 'libelle' => 'Informatique et systèmes'],
+            ['type_ref' => 'SPECIALITE', 'libelle' => 'Informatique et systèmes'],
             ['actif' => true]
         );
         $specComptabilite = Referentiel::firstOrCreate(
-            ['type_ref' => 'specialite', 'libelle' => 'Comptabilité et gestion'],
+            ['type_ref' => 'SPECIALITE', 'libelle' => 'Comptabilité et gestion'],
             ['actif' => true]
         );
 

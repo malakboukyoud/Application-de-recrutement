@@ -18,8 +18,6 @@ class CandidatureController extends Controller
     /**
      * Liste des candidatures — filtres par offre, état, dossier complet/incomplet,
      * recherche par candidat (§6.6 Présélection / §15 Interfaces attendues).
-     *
-     * Accessible en lecture à Admin, RH et Commission.
      */
     public function index(Request $request): View
     {
@@ -41,9 +39,6 @@ class CandidatureController extends Controller
         return view('candidatures.index', compact('candidatures', 'offres', 'etats', 'filtres'));
     }
 
-    /**
-     * Formulaire de création — réservé Admin/RH (cf. routes/web.php).
-     */
     public function create(Request $request): View
     {
         $candidature = new Candidature([
@@ -71,9 +66,6 @@ class CandidatureController extends Controller
             ->with('success', 'Candidature enregistrée avec succès.');
     }
 
-    /**
-     * Fiche candidature — accessible en lecture à Admin, RH et Commission.
-     */
     public function show(Candidature $candidature): View
     {
         $candidature->load(['candidat', 'offre', 'documents.typeDocument', 'convocations', 'evaluations']);
@@ -87,9 +79,6 @@ class CandidatureController extends Controller
         return view('candidatures.show', compact('candidature', 'piecesManquantes', 'typesDocument'));
     }
 
-    /**
-     * Formulaire d'édition complet — réservé Admin/RH (cf. routes/web.php).
-     */
     public function edit(Candidature $candidature): View
     {
         $candidats = Candidat::orderBy('nom')->get(['id_candidat', 'nom', 'prenom', 'cin']);
@@ -122,7 +111,6 @@ class CandidatureController extends Controller
 
     /**
      * Archivage au lieu de suppression définitive (§11 Sécurité et confidentialité).
-     * Réservé Admin/RH.
      */
     public function destroy(Candidature $candidature): RedirectResponse
     {
@@ -136,7 +124,6 @@ class CandidatureController extends Controller
 
     /**
      * Changement rapide d'état depuis la liste (présélection, rejet, convocation...) — §6.6.
-     * Réservé Admin/RH.
      */
     public function changerEtat(Request $request, Candidature $candidature): RedirectResponse
     {

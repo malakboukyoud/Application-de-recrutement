@@ -57,6 +57,13 @@
 
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
 
     font-family:"Segoe UI",sans-serif;
@@ -543,6 +550,7 @@ img{
 .content{
 
     padding:35px;
+    padding-top:95px;
     max-width:1300px;
     margin:auto;
 

@@ -57,6 +57,13 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 
   body {
     background:var(--bg);
@@ -148,6 +155,10 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
     min-height:100vh;
 
     padding:32px;
+
+    /* Espace en haut pour que le contenu (ex. bouton Creer/Ajouter) ne soit
+       jamais cache derriere la barre de navigation fixe (layouts.topbar). */
+    padding-top:95px;
 
 }
 

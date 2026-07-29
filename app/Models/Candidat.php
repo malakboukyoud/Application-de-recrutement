@@ -11,8 +11,8 @@ class Candidat extends Model
 
     protected $fillable = [
         'nom', 'prenom', 'sexe', 'date_naissance', 'lieu_naissance', 'cin',
-        'adresse', 'ville', 'telephone', 'email', 'niveau_etude', 'diplome',
-        'specialite', 'etablissement', 'annee_obtention', 'experience',
+        'adresse', 'ville', 'telephone', 'email', 'niveau_etude', 'id_diplome',
+        'id_specialite', 'etablissement', 'annee_obtention', 'experience',
         'situation_actuelle', 'observations',
     ];
 
@@ -23,6 +23,18 @@ class Candidat extends Model
     public function candidatures()
     {
         return $this->hasMany(Candidature::class, 'id_candidat', 'id_candidat');
+    }
+
+    // Diplôme obtenu par le candidat (référentiel, catégorie DIPLOME).
+    public function diplome()
+    {
+        return $this->belongsTo(Referentiel::class, 'id_diplome', 'id_ref');
+    }
+
+    // Spécialité du candidat (référentiel, catégorie SPECIALITE).
+    public function specialite()
+    {
+        return $this->belongsTo(Referentiel::class, 'id_specialite', 'id_ref');
     }
 
     public function getNomCompletAttribute(): string
@@ -41,8 +53,8 @@ class Candidat extends Model
             $q->where('nom', 'like', "%{$terme}%")
                 ->orWhere('prenom', 'like', "%{$terme}%")
                 ->orWhere('cin', 'like', "%{$terme}%")
-                ->orWhere('diplome', 'like', "%{$terme}%")
-                ->orWhere('ville', 'like', "%{$terme}%");
+                ->orWhere('ville', 'like', "%{$terme}%")
+                ->orWhereHas('diplome', fn ($qq) => $qq->where('libelle', 'like', "%{$terme}%"));
         });
     }
 }

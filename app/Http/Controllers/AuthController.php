@@ -21,15 +21,15 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        // Validation
         $request->validate([
             'login' => 'required',
             'password' => 'required'
         ]);
 
-        // Vérification dans la base
-        // On ne peut pas comparer un mot de passe hashé directement dans le WHERE SQL :
-        // on récupère d'abord l'utilisateur par son login, puis on vérifie le hash.
+        // On récupère l'utilisateur par login uniquement : le mot de passe
+        // est vérifié à part avec Hash::check (§17 : "les mots de passe
+        // doivent être protégés" — ils sont stockés hachés via Hash::make
+        // dans UtilisateurController::store/update).
         $user = DB::table('utilisateurs')
             ->join(
                 'referentiels',
@@ -44,21 +44,25 @@ class AuthController extends Controller
             ->where('utilisateurs.login', $request->login)
             ->first();
 
-        if ($user && $this->motDePasseValide($request->password, $user)) {
-
-            // Enregistrer l'utilisateur dans la session
-            session([
-                'user' => $user
-            ]);
-
-            // Redirection vers le Dashboard
-            return redirect()->route('dashboard.index');
+        if (! $user || ! Hash::check($request->password, $user->mot_de_passe)) {
+            return back()
+                ->withInput($request->only('login'))
+                ->with('error', 'Identifiant ou mot de passe incorrect.');
         }
 
-        // Si identifiants incorrects
-        return back()
-            ->withInput()
-            ->with('error', 'Identifiant ou mot de passe incorrect.');
+        // Compte désactivé par un administrateur (§11 : gestion des comptes)
+        if (isset($user->actif) && ! $user->actif) {
+            return back()
+                ->withInput($request->only('login'))
+                ->with('error', 'Votre compte a été désactivé. Contactez un administrateur.');
+        }
+
+        // Enregistrer l'utilisateur dans la session
+        session([
+            'user' => $user
+        ]);
+
+        return redirect()->route('dashboard.index');
     }
 
     /**
@@ -73,6 +77,12 @@ class AuthController extends Controller
 
     /**
      * Inscription (facultatif)
+     *
+     * Note : la création de comptes est réservée à l'Administrateur
+     * (§11 du CDC) et se fait normalement via UtilisateurController::store,
+     * qui est déjà protégé par le middleware `profil:Administrateur`.
+     * Cette route d'inscription libre reste dangereuse si elle est encore
+     * exposée publiquement — voir recommandation dans le README joint.
      */
     public function register(Request $request)
     {
@@ -89,40 +99,11 @@ class AuthController extends Controller
             'prenom' => $request->prenom,
             'email' => $request->email,
             'login' => $request->login,
-            'mot_de_passe' => Hash::make($request->password)
+            'mot_de_passe' => Hash::make($request->password),
+            'actif' => 1,
         ]);
 
         return redirect()->route('login.form')
                          ->with('success', 'Compte créé avec succès.');
     }
-
-    /**
-     * Vérifie le mot de passe saisi contre celui stocké en base.
-     *
-     * Certains comptes plus anciens ont pu être créés avant l'utilisation de Hash::make()
-     * et ont donc un mot de passe encore stocké en clair. Hash::check() lève une exception
-     * dans ce cas (le hash n'est pas au format Bcrypt), donc on gère les deux cas :
-     *   - mot de passe déjà haché  -> vérification normale avec Hash::check()
-     *   - mot de passe encore en clair -> comparaison directe, puis migration
-     *     automatique vers un hash Bcrypt pour que les connexions suivantes
-     *     passent par le chemin sécurisé.
-     */
-    private function motDePasseValide(string $motDePasseSaisi, object $utilisateur): bool
-    {
-        if (Hash::isHashed($utilisateur->mot_de_passe)) {
-            return Hash::check($motDePasseSaisi, $utilisateur->mot_de_passe);
-        }
-
-        if (hash_equals((string) $utilisateur->mot_de_passe, $motDePasseSaisi)) {
-            // Migration silencieuse vers un mot de passe haché.
-            DB::table('utilisateurs')
-                ->where('id_utilisateur', $utilisateur->id_utilisateur)
-                ->update(['mot_de_passe' => Hash::make($motDePasseSaisi)]);
-
-            return true;
-        }
-
-        return false;
-    }
-
 }

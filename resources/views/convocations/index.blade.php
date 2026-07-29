@@ -40,6 +40,13 @@
     box-sizing:border-box;
 }
 
+/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
+a, a:visited, a:hover, a:active{
+    color:inherit;
+    text-decoration:none;
+}
+
+
 body{
 
     font-family:"Segoe UI",sans-serif;
@@ -261,6 +268,7 @@ img{
 
 }
 
+
 .page-title{
 
     display:flex;
@@ -302,6 +310,38 @@ img{
     background:#df650e;
     color:white;
 
+}
+
+.btn-export{
+
+    background:white;
+    color:var(--green);
+    border:1px solid var(--green);
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+}
+
+.btn-export:hover{
+
+    background:var(--green);
+    color:white;
+
+}
+
+.page-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
 .card{
@@ -503,12 +543,57 @@ img{
     border-radius:20px;
     font-weight:600;
 }
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Toutes les icônes */
+.action a,
+.action button {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 8px;
+
+    font-size: 18px;
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+
+
+
 </style>
 
 </head>
 
 <body>
+@php
+    $profil = session('user')->profil ?? '';
 
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
 @include('layouts.sidebar')
 
 <div class="main">
@@ -630,16 +715,31 @@ img{
                 </p>
 
             </div>
+            <div class="page-actions">
 
-            <div class="d-flex gap-2 align-items-start">
-                <a href="{{ route('convocations.export.excel', request()->only(['search', 'statut_presence'])) }}" class="btn btn-outline-success">
-                    <i class="bi bi-file-earmark-excel me-1"></i> Excel
-                </a>
-                <a href="{{ route('convocations.export.pdf', request()->only(['search', 'statut_presence'])) }}" class="btn btn-outline-danger">
-                    <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                @if($admin || $serviceRH || $commission)
+                <a
+                    href="{{ route('convocations.export.excel', request()->only('search', 'statut_presence')) }}"
+                    class="btn-export">
+
+                    <i class="bi bi-file-earmark-excel"></i>
+
+                    Export Excel
+
                 </a>
 
-                @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+                <a
+                    href="{{ route('convocations.export.pdf', request()->only('search', 'statut_presence')) }}"
+                    class="btn-export">
+
+                    <i class="bi bi-file-earmark-pdf"></i>
+
+                    Export PDF
+
+                </a>
+                @endif
+
+                @if($admin || $serviceRH)
                 <a
                     href="{{ route('convocations.create') }}"
                     class="btn-add">
@@ -650,8 +750,8 @@ img{
 
                 </a>
                 @endif
-            </div>
 
+            </div>
         </div>
 
 
@@ -818,8 +918,7 @@ img{
                 <i class="bi bi-eye-fill"></i>
 
             </a>
-
-            @if (\App\Http\Middleware\RoleMiddleware::userHasRole(['administrateur', 'rh']))
+             @if($admin || $serviceRH)
             <a
                 href="{{ route('convocations.edit',$convocation->id_convocation) }}"
                 class="text-edit"
@@ -828,7 +927,8 @@ img{
                 <i class="bi bi-pencil-square"></i>
 
             </a>
-
+             @endif
+             @if($admin || $serviceRH)
             <form
                 action="{{ route('convocations.destroy',$convocation->id_convocation) }}"
                 method="POST"
@@ -849,8 +949,7 @@ img{
                 </button>
 
             </form>
-            @endif
-
+             @endif
         </div>
 
     </td>
