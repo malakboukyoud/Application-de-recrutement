@@ -2,15 +2,20 @@
 @php
     $profil = session('user')->profil ?? '';
 @endphp
-@php
 
+{{--
+    Profils officiels (référentiel PROFIL) : Administrateur, RH,
+    Commission, Responsable de service, Consultation.
+    L'Administrateur a toujours accès à tout, quel que soit le menu affiché.
+--}}
+@php
 $admin = $profil == 'Administrateur';
 
-$responsableRH = $profil == 'Responsable RH';
+$serviceRH = $profil == 'RH';
+
+$commission = $profil == 'Commission';
 
 $responsableService = $profil == 'Responsable de service';
-
-$agentRH = $profil == 'Agent RH';
 
 $consultation = $profil == 'Consultation';
 
@@ -112,7 +117,7 @@ select{
     left:0;
     right:0;
 
-    height:88px;
+    height:75px;
 
     background:#fff;
 
@@ -151,8 +156,8 @@ select{
 
 .ormvasm-brand img{
 
-    width:140px;
-    height:140px;
+    width:100px;
+    height:100px;
 
     object-fit:contain;
 
@@ -854,7 +859,7 @@ select{
 
     margin-left:70px;
     margin-right:70px;
-    padding-top:50px;
+    padding-top:70px;
 
     min-height:100vh;
 
@@ -2132,7 +2137,7 @@ select{
     <div class="ormvasm-brand">
 
         <img
-            src="{{ asset('image/ormva.png') }}"
+            src="{{ asset('image/ormvaa.png') }}"
             alt="ORMVASM"
         >
 
@@ -2160,34 +2165,6 @@ select{
             >
 
         </div>
-
-
-        <select
-            class="ormvasm-filter"
-            id="dashboardFilter"
-        >
-
-            <option value="all">
-                Toutes les statistiques
-            </option>
-
-            <option value="offres">
-                Offres
-            </option>
-
-            <option value="candidatures">
-                Candidatures
-            </option>
-
-            <option value="candidats">
-                Candidats
-            </option>
-
-            <option value="dossiers">
-                Dossiers
-            </option>
-
-        </select>
 
     </div>
 
@@ -3878,7 +3855,7 @@ select{
         <div class="ormvasm-quick-actions">
 
 
-            @if($admin || $responsableRH)
+            @if($admin || $serviceRH)
 
         <a href="{{ url('/offres/create') }}"
         class="ormvasm-quick-action orange">
@@ -3934,6 +3911,23 @@ select{
             </a>
 
 
+            @if($admin || $commission)
+
+<a
+    href="{{ url('/evaluations') }}"
+    class="ormvasm-quick-action green"
+>
+
+    <i class="bi bi-clipboard-check"></i>
+
+    <span>
+        Évaluations
+    </span>
+
+</a>
+
+@endif
+
             @if($profil == 'Administrateur')
 
 <a
@@ -3950,18 +3944,6 @@ select{
 </a>
 
 @endif
-          <a
-                href="{{ route('dashboard.export.excel') }}"
-                class="ormvasm-quick-action green"
-            >
-
-                <i class="bi bi-file-earmark-excel-fill"></i>
-
-                <span>
-                    Export Excel
-                </span>
-
-            </a>
             
 
         </div>
@@ -3991,7 +3973,7 @@ select{
 
         <div class="ormvasm-quick-actions">
 
-            @if($admin || $responsableRH || $responsableService)
+            @if($admin || $serviceRH || $responsableService)
 
             <a href="{{ route('dashboard.export.excel') }}"
             class="ormvasm-quick-action green">
@@ -4006,8 +3988,8 @@ select{
 
             @endif
 
-            @if($admin || $responsableRH || $responsableService)
-
+           
+            @if($admin || $serviceRH || $responsableService)
             <a href="{{ route('dashboard.export.pdf') }}"
             class="ormvasm-quick-action red">
 

@@ -326,6 +326,15 @@ text-align:center;
 </head>
 
 <body>
+    @php
+    $profil = session('user')->profil ?? '';
+
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
  <div class="container-page">
 
     <div class="offer-card">
@@ -562,7 +571,7 @@ text-align:center;
                     Retour à la liste
 
                 </a>
-
+            @if($admin || $serviceRH)
                 <a href="{{ route('offres.edit', $offre->id_offre) }}" class="btn-edit">
 
                     <i class="bi bi-pencil-square"></i>
@@ -570,7 +579,8 @@ text-align:center;
                     Modifier
 
                 </a>
-
+                @endif
+            @if($admin || $serviceRH)
                 <form action="{{ route('offres.destroy', $offre->id_offre) }}"
                       method="POST"
                       onsubmit="return confirm('Voulez-vous vraiment supprimer cette offre ?');">
@@ -588,7 +598,7 @@ text-align:center;
                     </button>
 
                 </form>
-
+@endif
             </div>
 
         </div>

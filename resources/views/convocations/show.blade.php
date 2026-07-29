@@ -355,7 +355,15 @@ text-align:center;
 </head>
 
 <body>
+@php
+    $profil = session('user')->profil ?? '';
 
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
 <div class="container-page">
 
 <!-- ==========================
@@ -612,7 +620,7 @@ Informations générales
         Retour à la liste
 
     </a>
-
+     @if($admin || $serviceRH)
     <a href="{{ route('convocations.edit',$convocation->id_convocation) }}"
        class="btn-edit">
 
@@ -621,7 +629,8 @@ Informations générales
         Modifier
 
     </a>
-
+    @endif
+@if($admin || $serviceRH)
     <form action="{{ route('convocations.destroy',$convocation->id_convocation) }}"
           method="POST"
           onsubmit="return confirm('Voulez-vous vraiment supprimer cette convocation ?');">
@@ -640,7 +649,7 @@ Informations générales
         </button>
 
     </form>
-
+@endif
 </div>
 
 </div>

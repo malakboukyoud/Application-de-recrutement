@@ -261,6 +261,7 @@ img{
 
 }
 
+
 .page-title{
 
     display:flex;
@@ -503,12 +504,57 @@ img{
     border-radius:20px;
     font-weight:600;
 }
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Toutes les icônes */
+.action a,
+.action button {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 8px;
+
+    font-size: 18px;
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: all 0.2s ease;
+}
+
+
+
+
 </style>
 
 </head>
 
 <body>
+@php
+    $profil = session('user')->profil ?? '';
 
+    $admin = $profil === 'Administrateur';
+    $serviceRH = $profil === 'RH';
+    $commission = $profil === 'Commission';
+    $responsableService = $profil === 'Responsable de service';
+    $consultation = $profil === 'Consultation';
+@endphp
 @include('layouts.sidebar')
 
 <div class="main">
@@ -630,7 +676,7 @@ img{
                 </p>
 
             </div>
-
+            @if($admin || $serviceRH)
             <a
                 href="{{ route('convocations.create') }}"
                 class="btn-add">
@@ -640,7 +686,7 @@ img{
                 Nouvelle convocation
 
             </a>
-
+        @endif
         </div>
 
 
@@ -807,7 +853,7 @@ img{
                 <i class="bi bi-eye-fill"></i>
 
             </a>
-
+             @if($admin || $serviceRH)
             <a
                 href="{{ route('convocations.edit',$convocation->id_convocation) }}"
                 class="text-edit"
@@ -816,7 +862,8 @@ img{
                 <i class="bi bi-pencil-square"></i>
 
             </a>
-
+             @endif
+             @if($admin || $serviceRH)
             <form
                 action="{{ route('convocations.destroy',$convocation->id_convocation) }}"
                 method="POST"
@@ -837,7 +884,7 @@ img{
                 </button>
 
             </form>
-
+             @endif
         </div>
 
     </td>
