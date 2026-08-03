@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Gérer la candidature')
-
+@include('layouts.topbar')
 @section('content')
     <h3 class="mb-3">Candidature {{ $candidature->numero_candidature }}</h3>
     <p class="text-muted">

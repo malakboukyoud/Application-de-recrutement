@@ -136,7 +136,7 @@
  </div>
 @extends('layouts.app')
 @section('title', 'Nouveau candidat')
-
+@include('layouts.topbar')
 @section('content')
     <h3 class="mb-3">Nouveau candidat</h3>
     <div class="card p-4">

@@ -40,13 +40,6 @@
     box-sizing:border-box;
 }
 
-/* Liens : professionnels, jamais soulignes ni bleus, meme visites */
-a, a:visited, a:hover, a:active{
-    color:inherit;
-    text-decoration:none;
-}
-
-
 body{
 
     font-family:"Segoe UI",sans-serif;
@@ -68,44 +61,40 @@ img{
 
 }
 
-/*==================================================
-                    TOPBAR
-==================================================*/
-/*==================================================
-                    TOPBAR
-==================================================*/
+/* =========================================================
+                    TOPBAR ORMVASM
+========================================================= */
 
-.topbar{
+.topbar {
 
-    position:fixed;
+    position: fixed;
 
-    top:0;
-    left:0;
-    right:0;
+    top: 0;
+    left: 0;
+    right: 0;
 
-    height:75px;
+    width: 100%;
+    height: 75px;
 
-    background:#ffffff;
+    background: #FFFFFF;
 
-    display:flex;
+    display: flex;
+    align-items: center;
 
-    justify-content:space-between;
+    padding: 0 30px;
 
-    align-items:center;
+    border-bottom: 1px solid #E5E7EB;
 
-    padding:0 30px;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, .06);
 
-    border-bottom:1px solid #E5E7EB;
-
-    box-shadow:0 2px 10px rgba(0,0,0,.05);
-
-    z-index:1100;
+    z-index: 5000;
 
 }
 
-/*==================================================
+
+/* =========================================================
                     LEFT
-==================================================*/
+========================================================= */
 
 .topbar-left{
 
@@ -141,375 +130,564 @@ img{
 
 }
 
-/*==================================================
+/* =========================================================
+   GAUCHE
+========================================================= */
+
+.ormvasm-topbar-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    flex-shrink:0;
+
+    min-width:390px;
+
+}
+
+
+.ormvasm-brand{
+
+    width:58px;
+
+    height:58px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+
+}
+
+
+.ormvasm-brand img{
+
+    width:55px;
+
+    height:55px;
+
+    object-fit:contain;
+
+}
+
+
+.ormvasm-brand-name{
+
+    max-width:300px;
+
+    color:#17324D;
+
+    font-size:13px;
+
+    line-height:1.35;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
                     CENTER
-==================================================*/
+========================================================= */
 
-.topbar-center{
+.topbar-center {
 
-    flex:1;
+    flex: 1;
 
-    display:flex;
+    display: flex;
 
-    justify-content:center;
+    align-items: center;
 
-}
+    justify-content: center;
 
-.search{
+    gap: 12px;
 
-    width:400px;
-
-    position:relative;
+    padding: 0 30px;
 
 }
 
-.search i{
 
-    position:absolute;
+/* =========================================================
+                    SEARCH
+========================================================= */
 
-    left:15px;
+.search {
 
-    top:50%;
+    width: 100%;
 
-    transform:translateY(-50%);
+    max-width: 380px;
 
-    color:#9CA3AF;
+    height: 44px;
 
-    font-size:15px;
-
-}
-
-.search input{
-
-    width:100%;
-
-    height:44px;
-
-    border:1px solid #D1D5DB;
-
-    border-radius:30px;
-
-    padding-left:45px;
-
-    padding-right:20px;
-
-    outline:none;
-
-    transition:.3s;
-
-    font-size:14px;
+    position: relative;
 
 }
 
-.search input:focus{
 
-    border-color:#15803D;
+.search i {
 
-    box-shadow:0 0 0 3px rgba(21,128,61,.15);
+    position: absolute;
 
-}
+    left: 15px;
 
-/*==================================================
-                    RIGHT
-==================================================*/
+    top: 50%;
 
-.user{
+    transform: translateY(-50%);
 
-    display:flex;
+    color: #64748B;
 
-    align-items:center;
+    font-size: 16px;
 
-    gap:20px;
+    z-index: 2;
 
 }
 
-/*==================================================
-                NOTIFICATION
-==================================================*/
 
-.notification{
+.search input {
 
-    position:relative;
+    width: 100%;
 
-    cursor:pointer;
+    height: 44px;
 
-}
+    border: 1px solid #E5E7EB;
 
-.notification i{
+    border-radius: 11px;
 
-    font-size:22px;
+    padding: 0 15px 0 43px;
 
-    color:#4B5563;
+    outline: none;
 
-    transition:.3s;
+    background: #F8FAFC;
 
-}
+    color: #1F2937;
 
-.notification:hover i{
+    font-size: 13px;
 
-    color:#15803D;
+    transition: all .2s ease;
 
 }
 
-.notification-badge{
 
-    position:absolute;
+.search input::placeholder {
 
-    top:-6px;
-
-    right:-8px;
-
-    min-width:18px;
-
-    height:18px;
-
-    padding:0 5px;
-
-    background:#EF4444;
-
-    color:#fff;
-
-    border-radius:50px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:11px;
-
-    font-weight:600;
+    color: #94A3B8;
 
 }
 
-/*==================================================
-                USER INFO
-==================================================*/
 
-.user-info{
+.search input:focus {
 
-    display:flex;
+    background: #FFFFFF;
 
-    flex-direction:column;
+    border-color: #15803D;
 
-    align-items:flex-end;
-
-    line-height:1.3;
+    box-shadow:
+        0 0 0 3px rgba(21, 128, 61, .08);
 
 }
 
-.user-info small{
 
-    color:#6B7280;
+/* =========================================================
+                    SELECT / FILTRES
+========================================================= */
 
-    font-size:12px;
+.topbar-center select {
+
+    width: 160px;
+
+    height: 44px;
+
+    padding: 0 13px;
+
+    border-radius: 11px;
+
+    border: 1px solid #E5E7EB;
+
+    background: #F8FAFC;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
 
 }
 
-.user-info strong{
 
-    font-size:14px;
+.topbar-center select:focus {
 
-    color:#111827;
+    background: #FFFFFF;
 
-    font-weight:600;
+    border-color: #15803D;
+
+    box-shadow:
+        0 0 0 3px rgba(21, 128, 61, .08);
 
 }
 
-/*==================================================
+
+/* =========================================================
+                    RIGHT / USER
+========================================================= */
+
+.user {
+
+    width: 260px;
+    min-width: 260px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 15px;
+
+}
+
+
+/* =========================================================
+                    NOTIFICATION
+========================================================= */
+
+.notification {
+
+    position: relative;
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #E5E7EB;
+
+    border-radius: 11px;
+
+    background: #FFFFFF;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+
+}
+
+
+.notification:hover {
+
+    background: #F0FDF4;
+
+    border-color: #15803D;
+
+}
+
+
+.notification i {
+
+    font-size: 19px;
+
+    color: #475569;
+
+    transition: all .2s ease;
+
+}
+
+
+.notification:hover i {
+
+    color: #15803D;
+
+}
+
+
+/* =========================================================
+                NOTIFICATION BADGE
+========================================================= */
+
+.notification-badge {
+
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 19px;
+    height: 19px;
+
+    padding: 0 5px;
+
+    border-radius: 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #DC2626;
+
+    color: #FFFFFF;
+
+    border: 2px solid #FFFFFF;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+                    USER INFO
+========================================================= */
+
+.user-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    line-height: 1.3;
+
+}
+
+
+.user-info small {
+
+    margin: 0;
+
+    color: #6B7280;
+
+    font-size: 10px;
+
+}
+
+
+.user-info strong {
+
+    margin-top: 3px;
+
+    color: #1F2937;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
                     AVATAR
-==================================================*/
+========================================================= */
 
-.avatar{
+.avatar {
 
-    width:45px;
+    width: 43px;
+    height: 43px;
 
-    height:45px;
+    min-width: 43px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    background:#2563EB;
+    background: #15803D;
 
-    color:#fff;
+    color: #FFFFFF;
 
-    display:flex;
+    display: flex;
 
-    justify-content:center;
+    align-items: center;
+    justify-content: center;
 
-    align-items:center;
+    font-size: 12px;
 
-    font-size:15px;
+    font-weight: 700;
 
-    font-weight:bold;
+    cursor: pointer;
 
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.avatar:hover{
-
-    transform:scale(1.05);
-
-    box-shadow:0 5px 15px rgba(37,99,235,.25);
+    transition: all .2s ease;
 
 }
 
-/*==================================================
-                RESPONSIVE
-==================================================*/
 
-@media(max-width:992px){
+.avatar:hover {
 
-    .topbar{
+    background: #166534;
 
-        padding:0 15px;
+    transform: scale(1.04);
+
+    box-shadow:
+        0 5px 15px rgba(21, 128, 61, .20);
+
+}
+
+
+/* =========================================================
+                    RESPONSIVE
+========================================================= */
+
+@media(max-width: 1200px) {
+
+    .topbar-left {
+
+        width: 280px;
+        min-width: 280px;
 
     }
 
-    .topbar-left h5{
+    .topbar-left h5 {
 
-        display:none;
-
-    }
-
-    .search{
-
-        width:250px;
+        font-size: 11px;
 
     }
 
-}
+    .topbar-center {
 
-@media(max-width:768px){
-
-    .search{
-
-        display:none;
+        padding: 0 15px;
 
     }
 
-    .user-info{
+    .search {
 
-        display:none;
+        max-width: 300px;
+
+    }
+
+    .topbar-center select {
+
+        width: 135px;
 
     }
 
 }
-.topbar-center{
 
-    display:flex;
 
-    align-items:center;
+/* =========================================================
+                    TABLETTE
+========================================================= */
 
-    gap:15px;
+@media(max-width: 1000px) {
 
-}
+    .topbar-left {
 
-.search{
+        width: auto;
+        min-width: auto;
 
-    width:330px;
+    }
 
-    position:relative;
+    .topbar-left h5 {
 
-}
+        display: none;
 
-.search i{
+    }
 
-    position:absolute;
+    .topbar-center {
 
-    left:15px;
+        padding: 0 15px;
 
-    top:50%;
+    }
 
-    transform:translateY(-50%);
+    .search {
 
-    color:#9CA3AF;
+        max-width: 300px;
 
-}
+    }
 
-.search input{
+    .user {
 
-    width:100%;
+        width: auto;
+        min-width: auto;
 
-    height:42px;
-
-    border:1px solid var(--border);
-
-    border-radius:25px;
-
-    padding-left:42px;
-
-    outline:none;
-
-    transition:.3s;
-
-}
-
-.search input:focus{
-
-    border-color:var(--green);
-
-    box-shadow:0 0 0 3px rgba(21,128,61,.12);
+    }
 
 }
 
 
-.topbar-center select{
+/* =========================================================
+                    MOBILE
+========================================================= */
 
-    width:170px;
-    height:42px;
+@media(max-width: 800px) {
 
-    border-radius:25px;
+    .topbar {
 
-    border:1px solid var(--border);
+        padding: 0 15px;
 
-    font-size:14px;
-    
-}
+    }
 
-.user{
+    .topbar-center {
 
-    display:flex;
+        display: none;
 
-    align-items:center;
+    }
 
-    gap:15px;
+    .user {
 
-}
+        width: auto;
+        min-width: auto;
 
-.user i{
+    }
 
-    font-size:20px;
+    .user-info {
 
-    color:#4B5563;
+        display: none;
 
-}
-
-.avatar{
-
-    width:42px;
-
-    height:42px;
-
-    border-radius:50%;
-
-    background:var(--blue);
-
-    color:#fff;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-weight:600;
+    }
 
 }
 
+
+/* =========================================================
+                    PETIT MOBILE
+========================================================= */
+
+@media(max-width: 500px) {
+
+    .topbar {
+
+        height: 70px;
+
+        padding: 0 12px;
+
+    }
+
+    .topbar-logo {
+
+        width: 48px;
+        height: 48px;
+
+    }
+
+    .notification {
+
+        width: 40px;
+        height: 40px;
+
+    }
+
+    .avatar {
+
+        width: 40px;
+        height: 40px;
+
+        min-width: 40px;
+
+    }
+
+}
 /*==================================================
                     CONTENU
 ==================================================*/
@@ -805,18 +983,809 @@ text-align:center;
     transition: all 0.2s ease;
 }
 
+.ormvasm-topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:18px;
+
+    flex-shrink:0;
+
+    min-width:250px;
+
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+.ormvasm-notification{
+
+    position:relative;
+
+}
+
+
+.ormvasm-notification-btn{
+
+    position:relative;
+
+    width:44px;
+
+    height:44px;
+
+    border:1px solid #E5E7EB;
+
+    background:#FFFFFF;
+
+    border-radius:11px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    color:#475569;
+
+    transition:.2s ease;
+
+}
+
+
+.ormvasm-notification-btn:hover{
+
+    color:#15803D;
+
+    border-color:#15803D;
+
+    background:#F0FDF4;
+
+}
+
+
+.ormvasm-notification-btn i{
+
+    font-size:19px;
+
+}
+
+
+.ormvasm-notification-badge{
+
+    position:absolute;
+
+    top:-5px;
+
+    right:-5px;
+
+    min-width:19px;
+
+    height:19px;
+
+    padding:0 5px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#DC2626;
+
+    color:#FFFFFF;
+
+    border:2px solid #FFFFFF;
+
+    font-size:9px;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
+   PANNEAU NOTIFICATIONS
+========================================================= */
+
+.ormvasm-notification-panel{
+
+    position:absolute;
+
+    top:55px;
+
+    right:0;
+
+    width:390px;
+
+    max-height:560px;
+
+    background:#FFFFFF;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:15px;
+
+    box-shadow:0 15px 45px rgba(15,23,42,.15);
+
+    overflow:hidden;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(-8px);
+
+    transition:.2s ease;
+
+    z-index:6000;
+
+}
+
+
+.ormvasm-user-menu.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+
+}
+/* NOTIFICATIONS OUVERTES */
+.ormvasm-notification-panel.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+
+/* MENU UTILISATEUR OUVERT */
+.ormvasm-user-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.ormvasm-notification-header{
+
+    padding:18px 20px;
+
+    border-bottom:1px solid #E5E7EB;
+
+}
+
+
+.ormvasm-notification-title{
+
+    color:#17324D;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+
+
+.ormvasm-notification-subtitle{
+
+    margin-top:4px;
+
+    color:#6B7280;
+
+    font-size:11px;
+
+}
+
+
+.ormvasm-notification-list{
+
+    max-height:420px;
+
+    overflow-y:auto;
+
+}
+
+
+.ormvasm-notification-item{
+
+    display:flex;
+
+    gap:12px;
+
+    padding:15px 18px;
+
+    border-bottom:1px solid #F1F5F9;
+
+    transition:.2s;
+
+}
+
+
+.ormvasm-notification-item:hover{
+
+    background:#F8FAFC;
+
+}
+
+
+.ormvasm-notification-icon{
+
+    width:38px;
+
+    height:38px;
+
+    min-width:38px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+.ormvasm-notification-icon.orange{
+
+    background:#FFEDD5;
+
+    color:#F97316;
+
+}
+
+
+.ormvasm-notification-icon.blue{
+
+    background:#E0F2FE;
+
+    color:#0284C7;
+
+}
+
+
+.ormvasm-notification-icon.red{
+
+    background:#FEE2E2;
+
+    color:#DC2626;
+
+}
+
+
+.ormvasm-notification-icon.green{
+
+    background:#DCFCE7;
+
+    color:#15803D;
+
+}
+
+
+.ormvasm-notification-content{
+
+    min-width:0;
+
+}
+
+
+.ormvasm-notification-content strong{
+
+    display:block;
+
+    color:#1F2937;
+
+    font-size:12px;
+
+}
+
+
+.ormvasm-notification-content p{
+
+    margin:4px 0;
+
+    color:#6B7280;
+
+    font-size:11px;
+
+    line-height:1.4;
+
+}
+
+
+.ormvasm-notification-time{
+
+    color:#94A3B8;
+
+    font-size:10px;
+
+}
+
+
+.ormvasm-notification-footer{
+
+    padding:13px 18px;
+
+    border-top:1px solid #E5E7EB;
+
+    text-align:center;
+
+}
+
+
+.ormvasm-notification-footer a{
+
+    color:#15803D;
+
+    font-size:11px;
+
+    font-weight:600;
+
+}
+
+
+/* =========================================================
+   UTILISATEUR
+========================================================= */
+
+.ormvasm-user{
+
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+
+    padding:5px 7px;
+
+    border-radius:11px;
+
+}
+
+
+.ormvasm-user:hover{
+
+    background:#F8FAFC;
+
+}
+
+
+.ormvasm-user-label{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+
+    line-height:1.3;
+
+}
+
+
+.ormvasm-user-label strong{
+
+    color:#1F2937;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+.ormvasm-user-label span{
+
+    margin-top:3px;
+
+    color:#6B7280;
+
+    font-size:10px;
+
+}
+
+
+.ormvasm-user-avatar{
+
+    width:43px;
+
+    height:43px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#15803D;
+
+    color:#FFFFFF;
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+/* =========================================================
+   MENU UTILISATEUR
+========================================================= */
+
+.ormvasm-user-menu{
+
+    position:absolute;
+
+    top:56px;
+
+    right:0;
+
+    width:230px;
+
+    background:#FFFFFF;
+
+    border:1px solid #E5E7EB;
+
+    border-radius:13px;
+
+    box-shadow:0 15px 40px rgba(15,23,42,.14);
+
+    padding:8px;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(-8px);
+
+    transition:.2s ease;
+
+    z-index:6000;
+
+}
+
+
+.ormvasm-notification-panel.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+
+}
+
+
+.ormvasm-user-menu a,
+
+.ormvasm-user-menu button{
+
+    width:100%;
+
+    min-height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:0 12px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:transparent;
+
+    color:#334155;
+
+    font-size:12px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+}
+
+
+.ormvasm-user-menu a:hover,
+
+.ormvasm-user-menu button:hover{
+
+    background:#F0FDF4;
+
+    color:#15803D;
+
+}
+
+
+.ormvasm-user-menu i{
+
+    width:18px;
+
+    text-align:center;
+
+    font-size:15px;
+
+}
+
+
+.ormvasm-user-menu hr{
+
+    border:0;
+
+    border-top:1px solid #E5E7EB;
+
+    margin:7px 0;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+    .ormvasm-topbar-left{
+
+        min-width:300px;
+
+    }
+
+    .ormvasm-brand-name{
+
+        max-width:220px;
+
+        font-size:11px;
+
+    }
+
+    .ormvasm-topbar-center{
+
+        padding:0 20px;
+
+    }
+
+}
+
+
+@media(max-width:850px){
+
+    .ormvasm-topbar{
+
+        padding:0 15px;
+
+    }
+
+    .ormvasm-topbar-left{
+
+        min-width:auto;
+
+    }
+
+    .ormvasm-brand-name{
+
+        display:none;
+
+    }
+
+    .ormvasm-topbar-center{
+
+        padding:0 15px;
+
+    }
+
+    .ormvasm-user-label{
+
+        display:none;
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .ormvasm-topbar{
+
+        height:72px;
+
+    }
+
+    .ormvasm-brand{
+
+        width:45px;
+
+        height:45px;
+
+    }
+
+    .ormvasm-brand img{
+
+        width:43px;
+
+        height:43px;
+
+    }
+
+    .ormvasm-topbar-center{
+
+        padding:0 8px;
+
+    }
+
+    .ormvasm-search{
+
+        max-width:none;
+
+        height:40px;
+
+    }
+
+    .ormvasm-topbar-right{
+
+        min-width:auto;
+
+        gap:7px;
+
+    }
+
+    .ormvasm-notification-btn{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+    .ormvasm-user-avatar{
+
+        width:40px;
+
+        height:40px;
+
+    }
+
+    .ormvasm-notification-panel{
+
+        position:fixed;
+
+        top:80px;
+
+        left:10px;
+
+        right:10px;
+
+        width:auto;
+
+    }
+
+    .ormvasm-user-menu{
+
+        right:0;
+
+    }
+
+}
+
 
 </style>
 <body>
+
 @php
-    $profil = session('user')->profil ?? '';
+
+    /*
+    |--------------------------------------------------------------------------
+    | UTILISATEUR CONNECTÉ
+    |--------------------------------------------------------------------------
+    */
+
+    $user = session('user');
+
+    $profil = $user->profil ?? '';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOM UTILISATEUR
+    |--------------------------------------------------------------------------
+    */
+
+    $prenom = $user->prenom ?? '';
+    $nom = $user->nom ?? '';
+
+    $userName = trim($prenom . ' ' . $nom);
+
+    if ($userName === '') {
+        $userName = 'Utilisateur';
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RÔLE
+    |--------------------------------------------------------------------------
+    */
+
+    $userRole = $user->profil ?? 'Utilisateur';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | INITIALES
+    |--------------------------------------------------------------------------
+    */
+
+    $userInitials =
+        strtoupper(substr($prenom, 0, 1)) .
+        strtoupper(substr($nom, 0, 1));
+
+    if ($userInitials === '') {
+        $userInitials = 'U';
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILS
+    |--------------------------------------------------------------------------
+    */
 
     $admin = $profil === 'Administrateur';
+
     $serviceRH = $profil === 'RH';
+
     $commission = $profil === 'Commission';
-    $responsableService = $profil === 'Responsable de service';
-    $consultation = $profil === 'Consultation';
+
+    $responsableService =
+        $profil === 'Responsable de service';
+
+    $consultation =
+        $profil === 'Consultation';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOTIFICATIONS
+    |--------------------------------------------------------------------------
+    */
+
+    $candidaturesEnAttente =
+        $candidaturesEnAttente ?? 0;
+
+    $dossiersIncomplets =
+        $dossiersIncomplets ?? 0;
+
+    $offresExpirentBientot =
+        $offresExpirentBientot ?? 0;
+
+    $convocationsAVenir =
+        $convocationsAVenir ?? 0;
+
+    $nbNotifications =
+        $nbNotifications ?? 0;
+
 @endphp
+
  <div>
     @include('layouts.sidebar')
         </div>
@@ -869,41 +1838,353 @@ text-align:center;
             </select>
 
         </div>
+        <div class="ormvasm-topbar-right">
 
-        
-        <div class="user">
+        {{-- =================================================
+             NOTIFICATIONS
+        ================================================== --}}
 
-        <div class="notification">
+        <div class="ormvasm-notification">
 
-            <i class="bi bi-bell fs-5"></i>
 
-            @if($nbNotifications > 0)
-                <span class="notification-badge">
-                    {{ $nbNotifications }}
+            <button
+    type="button"
+    class="ormvasm-notification-btn"
+    id="notificationButton"
+    title="Notifications"
+>
+    <i class="bi bi-bell"></i>
+
+    @if($nbNotifications > 0)
+
+        <span
+            class="ormvasm-notification-badge"
+            id="notificationBadge"
+        >
+            {{ $nbNotifications > 99 ? '99+' : $nbNotifications }}
+        </span>
+
+    @endif
+
+</button>
+
+            {{-- PANEL NOTIFICATIONS --}}
+
+            <div
+                class="ormvasm-notification-panel"
+                id="notificationPanel"
+            >
+
+
+                <div class="ormvasm-notification-header">
+
+                    <div>
+
+                        <div class="ormvasm-notification-title">
+
+                            Notifications
+
+                        </div>
+
+                        <div class="ormvasm-notification-subtitle">
+
+                            <span id="notificationCount">
+                                {{ $nbNotifications }}
+                            </span>
+
+                            notifications
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="ormvasm-notification-list">
+
+
+                    {{-- CANDIDATURES --}}
+
+                    @if($candidaturesEnAttente > 0)
+
+                        <a
+                            href="{{ url('/candidatures') }}"
+                            class="ormvasm-notification-item"
+                        >
+
+                            <div class="ormvasm-notification-icon orange">
+
+                                <i class="bi bi-person-plus"></i>
+
+                            </div>
+
+
+                            <div class="ormvasm-notification-content">
+
+                                <strong>
+                                    Nouvelles candidatures
+                                </strong>
+
+                                <p>
+                                    {{ $candidaturesEnAttente }}
+                                    candidature(s) en attente de traitement.
+                                </p>
+
+                                <span class="ormvasm-notification-time">
+                                    À traiter
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    @endif
+
+
+
+                    {{-- DOSSIERS --}}
+
+                    @if($dossiersIncomplets > 0)
+
+                        <a
+                            href="{{ url('/candidatures') }}"
+                            class="ormvasm-notification-item"
+                        >
+
+                            <div class="ormvasm-notification-icon blue">
+
+                                <i class="bi bi-folder-x"></i>
+
+                            </div>
+
+
+                            <div class="ormvasm-notification-content">
+
+                                <strong>
+                                    Dossiers incomplets
+                                </strong>
+
+                                <p>
+                                    {{ $dossiersIncomplets }}
+                                    dossier(s) nécessitent une vérification.
+                                </p>
+
+                                <span class="ormvasm-notification-time">
+                                    À vérifier
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    @endif
+
+
+
+                    {{-- OFFRES --}}
+
+                    @if($offresExpirentBientot > 0)
+
+                        <a
+                            href="{{ url('/offres') }}"
+                            class="ormvasm-notification-item"
+                        >
+
+                            <div class="ormvasm-notification-icon red">
+
+                                <i class="bi bi-clock-history"></i>
+
+                            </div>
+
+
+                            <div class="ormvasm-notification-content">
+
+                                <strong>
+                                    Offres bientôt expirées
+                                </strong>
+
+                                <p>
+                                    {{ $offresExpirentBientot }}
+                                    offre(s) arrivent bientôt à échéance.
+                                </p>
+
+                                <span class="ormvasm-notification-time">
+                                    Important
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    @endif
+
+
+
+                    {{-- CONVOCATIONS --}}
+
+                    @if($convocationsAVenir > 0)
+
+                        <a
+                            href="{{ url('/convocations') }}"
+                            class="ormvasm-notification-item"
+                        >
+
+                            <div class="ormvasm-notification-icon green">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                            </div>
+
+
+                            <div class="ormvasm-notification-content">
+
+                                <strong>
+                                    Convocations à venir
+                                </strong>
+
+                                <p>
+                                    {{ $convocationsAVenir }}
+                                    convocation(s) sont prévues.
+                                </p>
+
+                                <span class="ormvasm-notification-time">
+                                    À consulter
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    @endif
+
+
+
+                    {{-- AUCUNE NOTIFICATION --}}
+
+                    @if($nbNotifications === 0)
+
+                        <div class="ormvasm-empty">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            <p class="mb-0">
+                                Aucune notification.
+                            </p>
+
+                        </div>
+
+                    @endif
+
+
+                </div>
+
+
+
+                <div class="ormvasm-notification-footer">
+
+                    <a href="{{ url('/candidatures') }}">
+
+                        Voir les candidatures
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        {{-- =================================================
+             UTILISATEUR
+        ================================================== --}}
+
+        <div
+            class="ormvasm-user"
+            id="userMenuButton"
+        >
+
+
+            <div class="ormvasm-user-label">
+
+                <strong>
+                    {{ $userName }}
+                </strong>
+
+                <span>
+                    {{ $userRole }}
                 </span>
-            @endif
+
+            </div>
+
+
+            <div class="ormvasm-user-avatar">
+
+                {{ $userInitials }}
+
+            </div>
+
+
+
+            {{-- MENU UTILISATEUR --}}
+
+            <div
+                class="ormvasm-user-menu"
+                id="userMenuPanel"
+            >
+
+
+                @if($admin)
+
+                    <a
+                        href="{{ route('historique.index') }}"
+                    >
+
+                        <i class="bi bi-clock-history"></i>
+
+                        Historique des actions
+
+                    </a>
+
+                    <hr>
+
+                @endif
+
+
+
+                <form
+                    method="POST"
+                    action="{{ route('logout') }}"
+                >
+
+                    @csrf
+
+                    <button type="submit">
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        Déconnexion
+
+                    </button>
+
+                </form>
+
+
+            </div>
 
         </div>
 
-        <div class="user-info">
-
-            <small>{{ session('user')->profil ?? 'Utilisateur' }}</small>
-
-            <strong>
-                {{ session('user')->prenom ?? '' }}
-                {{ session('user')->nom ?? '' }}
-            </strong>
-
-        </div>
-
-        <div class="avatar">
-
-            {{ strtoupper(substr(session('user')->prenom ?? 'U',0,1)) }}
-            {{ strtoupper(substr(session('user')->nom ?? '',0,1)) }}
-
-        </div>
 
     </div>
+
+        
+        
     </div>
 
     <!-- ===========================
@@ -1099,55 +2380,423 @@ text-align:center;
         </div>
 
     </div>
-    <script>
- const search = document.getElementById("tableSearch");
-const type = document.getElementById("typeFilter");
-const statut = document.getElementById("statutFilter");
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
 
-function filtrer() {
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    const texte = search.value.toLowerCase();
-    const typeChoisi = type.value.toLowerCase();
-    const statutChoisi = statut.value.toLowerCase();
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-    const rows = document.querySelectorAll("#offresTable tbody tr");
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
 
-    rows.forEach(function(row){
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationPanel = document.getElementById('notificationPanel');
 
-        const contenu = row.innerText.toLowerCase();
+    const userMenuButton = document.getElementById('userMenuButton');
+    const userMenuPanel = document.getElementById('userMenuPanel');
 
-        const typeOffre = row.cells[3].innerText.toLowerCase();
-        const statutOffre = row.cells[7].innerText.toLowerCase();
 
-        const okRecherche = contenu.includes(texte);
-        const okType = typeChoisi === "" || typeOffre === typeChoisi;
-        const okStatut = statutChoisi === "" || statutOffre.includes(statutChoisi);
+    /* =========================================================
+       FONCTIONS
+    ========================================================= */
 
-        row.style.display = (okRecherche && okType && okStatut)
-            ? ""
-            : "none";
+    function openNotifications() {
+
+        if (!notificationPanel) {
+            return;
+        }
+
+        notificationPanel.classList.add('active');
+
+        if (userMenuPanel) {
+            userMenuPanel.classList.remove('active');
+        }
+    }
+
+
+    function closeNotifications() {
+
+        if (!notificationPanel) {
+            return;
+        }
+
+        notificationPanel.classList.remove('active');
+    }
+
+
+    function toggleNotifications() {
+
+        if (!notificationPanel) {
+            return;
+        }
+
+        const isOpen =
+            notificationPanel.classList.contains('active');
+
+        if (isOpen) {
+
+            closeNotifications();
+
+        } else {
+
+            openNotifications();
+
+        }
+    }
+
+
+    function openUserMenu() {
+
+        if (!userMenuPanel) {
+            return;
+        }
+
+        userMenuPanel.classList.add('active');
+
+        if (notificationPanel) {
+            notificationPanel.classList.remove('active');
+        }
+    }
+
+
+    function closeUserMenu() {
+
+        if (!userMenuPanel) {
+            return;
+        }
+
+        userMenuPanel.classList.remove('active');
+    }
+
+
+    function toggleUserMenu() {
+
+        if (!userMenuPanel) {
+            return;
+        }
+
+        const isOpen =
+            userMenuPanel.classList.contains('active');
+
+        if (isOpen) {
+
+            closeUserMenu();
+
+        } else {
+
+            openUserMenu();
+
+        }
+    }
+
+
+    /* =========================================================
+       BOUTON NOTIFICATIONS
+    ========================================================= */
+
+    if (notificationButton) {
+
+        notificationButton.addEventListener('click', function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            toggleNotifications();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       PANNEAU NOTIFICATIONS
+    ========================================================= */
+
+    if (notificationPanel) {
+
+        notificationPanel.addEventListener('click', function (event) {
+
+            /*
+             * Empêche le document de fermer le panneau
+             * lorsque l'on clique à l'intérieur.
+             */
+            event.stopPropagation();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       BOUTON UTILISATEUR
+    ========================================================= */
+
+    if (userMenuButton) {
+
+        userMenuButton.addEventListener('click', function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            toggleUserMenu();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       MENU UTILISATEUR
+    ========================================================= */
+
+    if (userMenuPanel) {
+
+        userMenuPanel.addEventListener('click', function (event) {
+
+            /*
+             * Empêche la fermeture immédiate du menu
+             * lorsqu'on clique à l'intérieur.
+             */
+            event.stopPropagation();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       CLIC À L'EXTÉRIEUR
+    ========================================================= */
+
+    document.addEventListener('click', function (event) {
+
+        /*
+         * NOTIFICATIONS
+         */
+
+        if (
+            notificationPanel &&
+            notificationButton &&
+            !notificationPanel.contains(event.target) &&
+            !notificationButton.contains(event.target)
+        ) {
+
+            closeNotifications();
+
+        }
+
+
+        /*
+         * MENU UTILISATEUR
+         */
+
+        if (
+            userMenuPanel &&
+            userMenuButton &&
+            !userMenuPanel.contains(event.target) &&
+            !userMenuButton.contains(event.target)
+        ) {
+
+            closeUserMenu();
+
+        }
 
     });
 
-}
 
-search.addEventListener("keyup", filtrer);
-type.addEventListener("change", filtrer);
-statut.addEventListener("change", filtrer);
+    /* =========================================================
+       ESCAPE
+    ========================================================= */
+
+    document.addEventListener('keydown', function (event) {
+
+        if (event.key === 'Escape') {
+
+            closeNotifications();
+
+            closeUserMenu();
+
+        }
+
+    });
+
+
+    /* =========================================================
+       RECHERCHE OFFRES
+    ========================================================= */
+
+    const search = document.getElementById('tableSearch');
+
+    const typeFilter = document.getElementById('typeFilter');
+
+    const statutFilter = document.getElementById('statutFilter');
+
+    const table = document.getElementById('offresTable');
+
+
+    function filtrerOffres() {
+
+        if (!table) {
+            return;
+        }
+
+        const texte =
+            search
+                ? search.value.toLowerCase().trim()
+                : '';
+
+        const typeChoisi =
+            typeFilter
+                ? typeFilter.value.toLowerCase().trim()
+                : '';
+
+        const statutChoisi =
+            statutFilter
+                ? statutFilter.value.toLowerCase().trim()
+                : '';
+
+
+        const rows =
+            table.querySelectorAll('tbody tr');
+
+
+        rows.forEach(function (row) {
+
+            /*
+             * Ignorer la ligne "Aucune offre disponible"
+             */
+            if (row.cells.length < 8) {
+                return;
+            }
+
+
+            const contenu =
+                row.innerText.toLowerCase();
+
+
+            /*
+             * COLONNE TYPE
+             * 0 = ID
+             * 1 = Référence
+             * 2 = Intitulé
+             * 3 = Type
+             * 4 = Postes
+             * 5 = Date publication
+             * 6 = Date limite
+             * 7 = Statut
+             */
+
+            const typeOffre =
+                row.cells[3]
+                    ? row.cells[3].innerText
+                        .toLowerCase()
+                        .trim()
+                    : '';
+
+
+            const statutOffre =
+                row.cells[7]
+                    ? row.cells[7].innerText
+                        .toLowerCase()
+                        .trim()
+                    : '';
+
+
+            const okRecherche =
+                texte === '' ||
+                contenu.includes(texte);
+
+
+            const okType =
+                typeChoisi === '' ||
+                typeOffre === typeChoisi;
+
+
+            const okStatut =
+                statutChoisi === '' ||
+                statutOffre.includes(statutChoisi);
+
+
+            if (
+                okRecherche &&
+                okType &&
+                okStatut
+            ) {
+
+                row.style.display = '';
+
+            } else {
+
+                row.style.display = 'none';
+
+            }
+
+        });
+
+    }
+
+
+    /* =========================================================
+       RECHERCHE
+    ========================================================= */
+
+    if (search) {
+
+        search.addEventListener('input', function () {
+
+            filtrerOffres();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       FILTRE TYPE
+    ========================================================= */
+
+    if (typeFilter) {
+
+        typeFilter.addEventListener('change', function () {
+
+            filtrerOffres();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       FILTRE STATUT
+    ========================================================= */
+
+    if (statutFilter) {
+
+        statutFilter.addEventListener('change', function () {
+
+            filtrerOffres();
+
+        });
+
+    }
+
+
+    /* =========================================================
+       INITIALISATION
+    ========================================================= */
+
+    filtrerOffres();
+
+
+});
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        {{ session('error') }}
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-    </div>
-@endif
+
 </body>
 
 </html>

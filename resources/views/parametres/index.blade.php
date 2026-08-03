@@ -1,8 +1,705 @@
 {{-- Destination : resources/views/parametres/index.blade.php --}}
 @extends('layouts.app')
 @section('title', 'Paramètres')
-
+@include('layouts.topbar')
 @section('content')
+
+<style>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+    --green: #15803D;
+    --green-dark: #166534;
+    --green-light: #DCFCE7;
+
+    --orange: #F97316;
+    --orange-dark: #EA580C;
+    --orange-light: #FFEDD5;
+
+    --blue: #0284C7;
+    --blue-light: #E0F2FE;
+
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+
+    --dark: #1F2937;
+    --background: #F5F7F6;
+    --white: #FFFFFF;
+    --border: #E5E7EB;
+
+    --shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   PAGE PARAMÈTRES
+========================================================= */
+
+/* Le contenu principal */
+main {
+    width: 100%;
+}
+
+/*
+   On cible directement le contenu de la page.
+   Le CSS fonctionne même si .parametres-page n'existe pas.
+*/
+main .container,
+main .container-fluid {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   TITRE PARAMÈTRES
+========================================================= */
+
+main h3 {
+    color: var(--dark);
+    font-size: 27px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 22px !important;
+}
+
+
+/* =========================================================
+   ALERTES
+========================================================= */
+
+main .alert {
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    padding: 12px 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.04);
+}
+
+main .alert-danger {
+    background: var(--red-light);
+    color: #991B1B;
+}
+
+
+/* =========================================================
+   ONGLETS
+========================================================= */
+
+#parametresTabs {
+    display: flex;
+    align-items: stretch;
+
+    width: 100%;
+
+    margin-bottom: 25px !important;
+
+    padding: 5px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: 12px;
+
+    box-shadow: var(--shadow);
+
+    overflow-x: auto;
+
+    gap: 4px;
+}
+
+
+/* Chaque élément */
+
+#parametresTabs .nav-item {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+
+/* Boutons des onglets */
+
+#parametresTabs .nav-link {
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 25px;
+
+    border: none !important;
+
+    border-radius: 9px !important;
+
+    background: transparent !important;
+
+    color: #64748B;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    transition: all .2s ease;
+}
+
+
+/* Icônes */
+
+#parametresTabs .nav-link i {
+    font-size: 17px;
+    margin-right: 6px;
+}
+
+
+/* Hover */
+
+#parametresTabs .nav-link:hover {
+    background: #F8FAFC !important;
+    color: var(--green) !important;
+}
+
+
+/* Onglet actif */
+
+#parametresTabs .nav-link.active {
+
+    background: var(--green) !important;
+
+    color: white !important;
+
+    font-weight: 600;
+
+    box-shadow: 0 4px 10px rgba(21,128,61,.20);
+}
+
+
+/* Icône actif */
+
+#parametresTabs .nav-link.active i {
+    color: white !important;
+}
+
+
+/* =========================================================
+   CONTENU
+========================================================= */
+
+.tab-content {
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARTES
+========================================================= */
+
+.tab-content .card {
+
+    background: white;
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: 14px !important;
+
+    box-shadow: var(--shadow);
+
+    padding: 25px !important;
+}
+
+
+/* Titres des cartes */
+
+.tab-content .card h6 {
+
+    color: var(--dark);
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+/* Texte muted */
+
+.tab-content .text-muted {
+    color: var(--gray) !important;
+}
+
+
+/* =========================================================
+   FORMULAIRES
+========================================================= */
+
+.tab-content .form-label {
+
+    color: #374151;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+
+/* Inputs + Select */
+
+.tab-content .form-control,
+.tab-content .form-select {
+
+    min-height: 44px;
+
+    padding: 9px 13px;
+
+    background: #F8FAFC;
+
+    border: 1px solid var(--border);
+
+    border-radius: 9px;
+
+    color: var(--dark);
+
+    font-size: 13px;
+
+    box-shadow: none;
+
+    transition: all .2s ease;
+}
+
+
+/* Focus */
+
+.tab-content .form-control:focus,
+.tab-content .form-select:focus {
+
+    background: white;
+
+    border-color: var(--green);
+
+    box-shadow: 0 0 0 3px rgba(21,128,61,.10);
+
+}
+
+
+/* Placeholder */
+
+.tab-content .form-control::placeholder {
+    color: #94A3B8;
+}
+
+
+/* =========================================================
+   BOUTONS
+========================================================= */
+
+.tab-content .btn {
+
+    min-height: 42px;
+
+    padding: 9px 18px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition: all .2s ease;
+}
+
+
+/* Bouton vert */
+
+.tab-content .btn-success {
+
+    background: var(--green) !important;
+
+    border-color: var(--green) !important;
+
+    color: white !important;
+}
+
+
+.tab-content .btn-success:hover {
+
+    background: var(--green-dark) !important;
+
+    border-color: var(--green-dark) !important;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(21,128,61,.18);
+}
+
+
+/* =========================================================
+   BOUTON UTILISATEURS
+========================================================= */
+
+.tab-content .btn-outline-primary {
+
+    color: var(--blue) !important;
+
+    background: var(--blue-light) !important;
+
+    border-color: #BAE6FD !important;
+}
+
+
+.tab-content .btn-outline-primary:hover {
+
+    color: white !important;
+
+    background: var(--blue) !important;
+
+    border-color: var(--blue) !important;
+}
+
+
+/* =========================================================
+   BOUTON RÉFÉRENTIEL
+========================================================= */
+
+.tab-content .btn-outline-secondary {
+
+    color: #475569 !important;
+
+    background: white !important;
+
+    border-color: var(--border) !important;
+}
+
+
+.tab-content .btn-outline-secondary:hover {
+
+    background: var(--gray-light) !important;
+
+    border-color: #CBD5E1 !important;
+
+    color: var(--dark) !important;
+}
+
+
+/* =========================================================
+   HR
+========================================================= */
+
+.tab-content hr {
+
+    margin: 25px 0;
+
+    border: 0;
+
+    border-top: 1px solid var(--border);
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   TABLEAU RÉFÉRENTIELS
+========================================================= */
+
+#referentiels .table-responsive {
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+}
+
+
+#referentiels .table {
+
+    margin: 0;
+
+    color: var(--dark);
+
+    font-size: 13px;
+}
+
+
+/* En-tête */
+
+#referentiels .table thead th {
+
+    padding: 13px 15px;
+
+    background: #F8FAFC !important;
+
+    color: #475569;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* Cellules */
+
+#referentiels .table tbody td {
+
+    padding: 13px 15px;
+
+    vertical-align: middle;
+
+    border-bottom: 1px solid #F1F5F9;
+}
+
+
+/* Hover ligne */
+
+#referentiels .table tbody tr:hover {
+
+    background: #F8FAFC;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.tab-content .badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 60px;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.tab-content .badge.bg-success {
+
+    background: var(--green-light) !important;
+
+    color: var(--green-dark) !important;
+}
+
+
+.tab-content .badge.bg-secondary {
+
+    background: var(--gray-light) !important;
+
+    color: #475569 !important;
+}
+
+
+/* =========================================================
+   PROFIL
+========================================================= */
+
+/*
+   Ton HTML possède style="max-width:600px"
+   On le remplace ici.
+*/
+
+#profil .card {
+
+    width: 100%;
+
+    max-width: 760px !important;
+}
+
+
+/* =========================================================
+   RÉFÉRENTIELS
+========================================================= */
+
+#referentiels .card {
+
+    width: 100%;
+
+    max-width: none !important;
+}
+
+
+/* =========================================================
+   UTILISATEURS
+========================================================= */
+
+#utilisateurs .card {
+
+    width: 100%;
+
+    max-width: 850px;
+}
+
+
+#utilisateurs p {
+
+    max-width: 700px;
+
+    color: var(--gray);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   AFFICHAGE
+========================================================= */
+
+#affichage .card {
+
+    width: 100%;
+
+    max-width: 850px;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.tab-pane {
+
+    animation: fadeParametres .25s ease;
+}
+
+
+@keyframes fadeParametres {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(5px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 992px) {
+
+    #parametresTabs .nav-link {
+
+        padding: 0 17px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    #parametresTabs {
+
+        padding: 4px;
+
+        border-radius: 10px;
+    }
+
+
+    #parametresTabs .nav-link {
+
+        min-height: 44px;
+
+        padding: 0 14px;
+
+        font-size: 12px;
+    }
+
+
+    #parametresTabs .nav-link i {
+
+        font-size: 15px;
+    }
+
+
+    .tab-content .card {
+
+        padding: 18px !important;
+
+        border-radius: 12px !important;
+    }
+
+
+    #profil .card,
+    #utilisateurs .card,
+    #affichage .card {
+
+        max-width: 100% !important;
+    }
+
+
+    .tab-content .btn {
+
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   PETIT MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    #parametresTabs .nav-link {
+
+        padding: 0 11px;
+    }
+
+
+    .tab-content .card {
+
+        padding: 15px !important;
+    }
+
+
+    main h3 {
+
+        font-size: 22px;
+    }
+
+}
+
+</style>
     <h3 class="mb-3">Paramètres</h3>
 
     @if ($errors->any())

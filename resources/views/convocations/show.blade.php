@@ -362,6 +362,7 @@ text-align:center;
 </head>
 
 <body>
+    @include('layouts.topbar')
 @php
     $profil = session('user')->profil ?? '';
 

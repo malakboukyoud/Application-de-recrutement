@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', "Modifier l'évaluation")
-
+@include('layouts.topbar')
 @section('content')
     <h3 class="mb-1">Modifier l'évaluation</h3>
     <p class="text-muted">

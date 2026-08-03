@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', $candidat->nom_complet)
-
+@include('layouts.topbar')
 @section('content')
     <div class="d-flex justify-content-between align-items-start mb-3">
         <div>

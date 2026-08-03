@@ -284,6 +284,49 @@ body{
     }
 
 }
+/* =========================
+   ALERTES
+========================= */
+
+.alert{
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 350px;
+    max-width: 500px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    z-index: 9999;
+    animation: fadeDown .4s ease;
+}
+
+.alert-danger{
+    background: #fdeaea;
+    color: #b42318;
+    border: 1px solid #f5c2c7;
+}
+
+.alert-success{
+    background: #eaf7ee;
+    color: #146c43;
+    border: 1px solid #badbcc;
+}
+
+@keyframes fadeDown{
+    from{
+        opacity:0;
+        transform:translate(-50%,-20px);
+    }
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+}
 </style>
 </head>
 

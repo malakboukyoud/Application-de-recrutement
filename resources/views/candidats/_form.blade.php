@@ -1,7 +1,7 @@
 @php
     $old = fn ($field, $default = null) => old($field, $candidat->{$field} ?? $default);
 @endphp
-
+@include('layouts.topbar')
 <div class="row g-3">
     <div class="col-md-6">
         <label class="form-label">Nom *</label>

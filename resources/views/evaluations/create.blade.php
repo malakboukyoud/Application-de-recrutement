@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Nouvelle évaluation')
-
+@include('layouts.topbar')
 @section('content')
     <h3 class="mb-1">Nouvelle évaluation</h3>
     <p class="text-muted">

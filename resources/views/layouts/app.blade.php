@@ -150,15 +150,17 @@ a, a:visited, a:hover, a:active{
 
     margin-left:260px;
 
-    width:calc(100% - 260px);
+    width:calc(100vw - 260px);
 
     min-height:100vh;
 
-    padding:32px;
+    padding:40px;
 
-    /* Espace en haut pour que le contenu (ex. bouton Creer/Ajouter) ne soit
-       jamais cache derriere la barre de navigation fixe (layouts.topbar). */
     padding-top:95px;
+
+    box-sizing:border-box;
+
+    overflow-x:auto;
 
 }
 

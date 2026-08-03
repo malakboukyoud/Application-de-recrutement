@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Modifier le candidat')
-
+@include('layouts.topbar')
 @section('content')
     <h3 class="mb-3">Modifier : {{ $candidat->nom_complet }}</h3>
     <div class="card p-4">

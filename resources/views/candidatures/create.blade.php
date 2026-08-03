@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Nouvelle candidature')
-
+@include('layouts.topbar')
 @section('content')
 <style>
     /* ===========================

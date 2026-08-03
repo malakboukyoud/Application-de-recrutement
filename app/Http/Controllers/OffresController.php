@@ -27,6 +27,53 @@ class OffresController extends Controller
               ->orWhere('service_concerne', 'like', "%{$search}%");
 
         });
+        $offres = OffreRecrutement::orderBy('date_publication', 'desc')
+        ->paginate(10);
+
+    // Notifications
+    $candidaturesEnAttente = Candidature::where(
+        'etat_candidature',
+        'Reçue'
+    )->count();
+
+    $dossiersIncomplets = Candidature::where(
+        'dossier_complet',
+        0
+    )->count();
+
+    $offresExpirentBientot = OffreRecrutement::where(
+        'statut',
+        'Ouverte'
+    )
+    ->whereBetween(
+        'date_limite_depot',
+        [
+            now()->toDateString(),
+            now()->addDays(7)->toDateString()
+        ]
+    )
+    ->count();
+
+    $convocationsAVenir = Convocation::whereDate(
+        'date_convocation',
+        '>=',
+        now()->toDateString()
+    )->count();
+
+    $nbNotifications =
+        $candidaturesEnAttente +
+        $dossiersIncomplets +
+        $offresExpirentBientot +
+        $convocationsAVenir;
+
+    return view('offres.index', compact(
+        'offres',
+        'candidaturesEnAttente',
+        'dossiersIncomplets',
+        'offresExpirentBientot',
+        'convocationsAVenir',
+        'nbNotifications'
+    ));
 
     }
 
@@ -91,6 +138,7 @@ class OffresController extends Controller
         return redirect()
                 ->route('offres.index')
                 ->with('success', 'Offre ajoutée avec succès.');
+        
     }
 
     /**
